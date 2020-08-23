@@ -4,7 +4,6 @@ FireFreeze is the best freeze plugin on the market! It has several new features 
 
 Features
 --------
-* [StrikePractice](https://www.spigotmc.org/resources/strikepractice-%E2%80%93-1v1-2v2-pvp-bots-tournaments-parties-kit-editor-gui-best-of-rounds-and-more.46906/) support
 * Titles Support
 * GUI Support
 * 100% Configurable (messages.yml and config.yml)
