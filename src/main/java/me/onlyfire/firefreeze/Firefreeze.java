@@ -1,0 +1,163 @@
+package me.onlyfire.firefreeze;
+
+import lombok.Getter;
+import me.onlyfire.firefreeze.backend.SQLConnection;
+import me.onlyfire.firefreeze.command.FreezeCommand;
+import me.onlyfire.firefreeze.command.FreezeHistoryCommand;
+import me.onlyfire.firefreeze.command.MainCommand;
+import me.onlyfire.firefreeze.command.UnfreezeCommand;
+import me.onlyfire.firefreeze.listener.FreezeListener;
+import me.onlyfire.firefreeze.objects.FreezeProfile;
+import me.onlyfire.firefreeze.tasks.AnydeskTask;
+import me.onlyfire.firefreeze.tasks.FreezeMainTask;
+import me.onlyfire.firefreeze.config.FireFreezeConfiguration;
+import me.onlyfire.firefreeze.utils.FireFreezeUpdater;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
+import java.util.*;
+
+@Getter
+public class Firefreeze extends JavaPlugin {
+
+    private static Firefreeze instance;
+
+    private FireFreezeConfiguration configFile;
+    private FireFreezeConfiguration messagesFile;
+    private FireFreezeConfiguration locationFile;
+
+    private FireFreezeUpdater updater;
+
+    private SQLConnection connection;
+
+    //Player (UUID) staff - Player (UUID) frozen
+    private Map<UUID, UUID> frozenPlayers = new HashMap<>();
+
+    //Player (UUID) frozen - AnydeskTask task
+    private Map<UUID, AnydeskTask> anydeskTask = new HashMap<>();
+
+    private FreezeMainTask mainTask;
+
+    private String prefix;
+
+    @Override
+    public void onEnable() {
+        instance = this;
+
+        setupStorage();
+        loadCommandsAndListeners();
+
+        this.prefix = ChatColor.translateAlternateColorCodes('&', getMessagesFile().getString("prefix"));
+        this.mainTask = new FreezeMainTask(this);
+
+        this.updater = new FireFreezeUpdater(this, 77105);
+
+        if (getConfigFile().getBoolean("other_settings.enable_autoupdater")) {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> updater.update(), 7200 * 20, 7200 * 20);
+        }
+
+        if (configFile.getBoolean("other_settings.enable_bstats"))
+            new Metrics(this, 7133);
+
+        this.mainTask.runTaskTimerAsynchronously(this, 5L, 60L);
+    }
+
+    @Override
+    public void onDisable() {
+        for (FreezeProfile profiles : getAllPlayers()){
+            if (profiles.isFrozen()) profiles.forceUnfreeze(profiles.getWhoFroze());
+        }
+        closeAll();
+    }
+
+    private void setupStorage(){
+        this.configFile = new FireFreezeConfiguration("config.yml");
+        this.messagesFile = new FireFreezeConfiguration("messages.yml");
+        this.locationFile = new FireFreezeConfiguration("locations.yml");
+
+        switch (configFile.getString("storage_type").toLowerCase()){
+            case "sqlite":{
+                try {
+                    this.connection = new SQLConnection();
+                } catch (SQLException | ClassNotFoundException ex) {
+                    getServer().getConsoleSender().sendMessage("§c[FireFreeze] Could not connect to the sqlite database!");
+                    ex.printStackTrace();
+                }
+                break;
+            }
+
+            case "mysql":{
+                try {
+                    this.connection = new SQLConnection(
+                            configFile.getString("mysql_configuration.host"),
+                            configFile.getString("mysql_configuration.port"),
+                            configFile.getString("mysql_configuration.user"),
+                            configFile.getString("mysql_configuration.password"),
+                            configFile.getString("mysql_configuration.database"));
+                } catch (ClassNotFoundException | SQLException e) {
+                    getServer().getConsoleSender().sendMessage("§c[FireFreeze] Could not connect to the mysql database!");
+                    e.printStackTrace();
+                }
+                break;
+            }
+            default:{
+                getServer().getConsoleSender().sendMessage("§c[FireFreeze] Could not find correct database! Be sure to use sqlite or mysql in the config!");
+                onDisable();
+                break;
+            }
+        }
+        getServer().getConsoleSender().sendMessage("§a[FireFreeze] Connection estabilished!");
+    }
+
+    private void loadCommandsAndListeners(){
+        getCommand("freeze").setExecutor(new FreezeCommand(this));
+        getCommand("freezehistory").setExecutor(new FreezeHistoryCommand(this));
+        getCommand("unfreeze").setExecutor(new UnfreezeCommand(this));
+        getCommand("firefreeze").setExecutor(new MainCommand(this));
+
+        getServer().getPluginManager().registerEvents(new FreezeListener(this), this);
+    }
+
+    private void closeAll(){
+        if (this.mainTask != null) this.mainTask.cancel();
+
+        try {
+            if (this.connection != null) this.connection.close();
+        } catch (SQLException ex) {
+            getServer().getConsoleSender().sendMessage("§c[FireFreeze] Could not stop SQL process!");
+            ex.printStackTrace();
+        }
+    }
+
+    public List<FreezeProfile> getAllPlayers(){
+        List<FreezeProfile> list = new ArrayList<>();
+
+        for (Player player : Bukkit.getOnlinePlayers()){
+            FreezeProfile profile = new FreezeProfile(player);
+            list.add(profile);
+        }
+
+        return list;
+    }
+
+    public static Firefreeze getInstance() {
+        return instance;
+    }
+
+    public boolean isLaterThanOneDotEight(){
+        return Bukkit.getVersion().contains("1.9")
+                || Bukkit.getVersion().contains("1.10")
+                || Bukkit.getVersion().contains("1.11")
+                || Bukkit.getVersion().contains("1.12")
+                || Bukkit.getVersion().contains("1.13")
+                || Bukkit.getVersion().contains("1.14")
+                || Bukkit.getVersion().contains("1.15")
+                || Bukkit.getVersion().contains("1.16");
+    }
+
+
+}

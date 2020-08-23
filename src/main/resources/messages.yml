@@ -1,0 +1,47 @@
+#This is the main messages file for FireFreeze!
+
+#Set to "" to remove prefix
+prefix: "&c&lFire&4&lFreeze &7| "
+
+errors:
+  not_permission: "&cYou don't have permissions to execute this command."
+  incorrect_usage: "&cCorrect Syntax: /freeze <player>"
+  only_players: "&cYou can't execute this command from console"
+  player_not_found: "&cThat player is not online."
+  player_already_frozen: "&cThat player is already frozen!"
+  player_already_unfrozen: "&cThis player is already unfrozen!"
+  cannot_attack: "&cYou can't attack this player because he's frozen."
+  cannot_attack_others: "&cYou can't attack other players when you are frozen."
+  cannot_freeze_player: "&cYou can't freeze/unfreeze that player!"
+  cannot_freeze_yourself: "&cYou can't freeze/unfreeze yourself!"
+
+unfreeze:
+  player_unfrozen: "&aSuccessfully unfroze {PLAYER}."
+
+freeze:
+  player_frozen: "&aSuccessfully froze {PLAYER}. All staff members have been notified."
+
+anydesk_task:
+  accepted: "&a{PLAYER} has accepted the screenshare! &6ID: {ID}"
+  refused: "&c{PLAYER} has refused the screenshare! &c[Ban?]"
+
+#The global prefix will not be applied in these messages
+freeze_history:
+  has_history: "&a{PLAYER} has {ENTRIES} entries"
+  no_history: "&c{PLAYER} doesn't have any freeze history."
+  header:
+    - "&7&m---------------------------------"
+    - ""
+  history: "&a> by {STAFF} at {TIME}"
+  footer:
+    - ""
+    - "&7&m---------------------------------"
+
+#The global prefix will not be applied in these messages
+staff_broadcast:
+  froze: "&7[&aFreeze&7] &7{STAFF} &ahas froze &7{PLAYER}."
+  unfroze: "&7[&aFreeze&7] &7{STAFF} &ahas unfroze &7{PLAYER}."
+  quit: "&7[&cFreeze&7] {PLAYER} &chas quit the server while frozen."
+  
+  
+  

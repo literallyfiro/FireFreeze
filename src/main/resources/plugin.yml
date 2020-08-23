@@ -1,0 +1,23 @@
+name: FireFreeze
+version: ${project.version}
+main: me.onlyfire.firefreeze.Firefreeze
+api-version: 1.13
+softdepend: [StrikePractice]
+authors: [ImOnlyFire]
+description: The best freeze plugin!
+commands:
+  freeze:
+    description: "Freeze a player with this command"
+    permission: firefreeze.freeze
+    aliases: [ss, screenshare, control]
+  unfreeze:
+    description: "Unfreeze a player with this command"
+    permission: firefreeze.unfreeze
+    aliases: [unss, unscreenshare]
+  firefreeze:
+    description: "Main management command"
+    permission: firefreeze.admin
+    aliases: [freezeplugin]
+  freezehistory:
+    description: "Get the history of a player"
+    permission: firefreeze.freezehistory

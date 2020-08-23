@@ -1,0 +1,134 @@
+#This is the main configuration file for FireFreeze!
+
+# Choose the database system:
+#
+# mysql -> The plugin connects to mysql at start (needs to configure)
+# sqlite -> The plugin uses a .db file (No requirements)
+storage_type: sqlite
+
+# Configuration for MySQL
+# Edit these values only if you are using mysql as storage type
+mysql_configuration:
+  host: 127.0.0.1
+  port: 3306
+  user: firefreeze
+  password: isthebest
+  database: firefreeze
+
+command_settings:
+  # If you set this on true, the /freeze will merge with /unfreeze
+  # So, if you need to unfreeze a player, you can do /freeze <player> to unfreeze him
+  # And, yes, the /unfreeze will work as well
+  merge_freeze_with_unfreeeze: false
+
+
+freeze_methods:
+  # If this is set to true, firefreeze will use titles
+  # The frozen player will see a title and a subtitle when he gets frozen and unfrozen
+  titles:
+    enable: false
+    freeze_title: "&4You have been frozen"
+    freeze_subtitle: "&7Do not log out"
+    unfreeze_title: "&aYou have been unfrozen"
+    unfreeze_subtitle: "&fYou can play again"
+
+
+  # When a player gets frozen, he will have (by default) 45 seconds to give
+  # his anydesk id to the staff. If not, the plugin will send a message to all the staff
+  anydesk_task:
+    enable: false
+    minutes_to_give: 1
+
+  # If this is set to true, firefreeze will use gui
+  # The frozen player will see a non-closable gui until he gets unfrozen
+  gui:
+    enable: false
+    # Number of rows
+    rows: 1
+    name: "Freeeze GUI"
+    items:
+      information:
+        material: PAPER
+        slot: 4
+        name: "&cYou have been frozen"
+        enable_lore: true
+        lore:
+          - "&7&m-------------------------------------"
+          - "&cYou have been frozen by a staff member"
+          - "&cPlease join ts.server.com to accept the ss"
+          - ""
+          - "&6Do not log out or you will be banned"
+          - "&7&m-------------------------------------"
+      other:
+        #DON'T USE ITEM IDs !!!
+        material: PAPER
+        slot: 8
+        name: "&5Hey"
+        enable_lore: true
+        lore:
+          - "&aYou can add other items now!"
+
+
+  # If this is set to true, firefreeze will use a chat message
+  # The frozen player will see a normal chat message until he gets unfrozen
+  normal_chat:
+    enable: true
+    froze_message:
+      - "&7&m-------------------------------------"
+      - "&cYou have been frozen by a staff member"
+      - "&cPlease join ts.server.com to accept the ss"
+      - ""
+      - "&6Do not log out or you will be banned"
+      - "&7&m-------------------------------------"
+    unfroze_message:
+        - "&7&m-----------------------"
+        - "&aYou have been unfrozen!"
+        - "&aYou can now play again!"
+        - "&7&m-----------------------"
+
+  # The frozen player and the executor will be teleported to a specified location
+  # /firefreeze setPos to set the positions
+  enable_freeze_teleport: false
+
+  # The server will give glowing effect to the frozen player
+  enable_freeze_glowing: false
+
+  # If you set this to true, the server will set an effect when a player gets frozen
+  freeze_effect:
+    enable: true
+    name: BLINDNESS
+    power: 255
+
+freeze_settings:
+  # You can disable movements when a player is frozen
+  # Ex. disable_chat: true will allow the player to chat
+  onFreeze:
+    disable_movements: true
+    disable_chat: false
+    disable_commands: false
+    disable_drop: true
+    disable_interaction: true
+    disable_attack: true
+
+  # When a player gets frozen, the console will execute a command
+  # Use console_freeze_command: [] to disable
+  # If you want to terminate a strikepractice match, type 'sprac cancel {PLAYER} reason'
+  console_freeze_command:
+    - "placeHereYourCommands"
+
+  # When a player gets unfrozen, the console will execute a command
+  # Use console_unfreeze_command: [] to disable
+  # WARNING: This will not work if the unfreeze is forced (plugin unloaded or /firefreeze unfreezeall)
+  console_unfreeze_command:
+    - "placeHereYourCommands"
+
+  # When a frozen player left the server, the console will execute a command
+  # Use console_quit_command: [] to disable
+  console_quit_command:
+    - "ban {PLAYER} Cheating"
+
+other_settings:
+  enable_bstats: true
+  enable_autoupdater: true
+  time_set: "yyyy-MM-dd HH:mm:ss"
+
