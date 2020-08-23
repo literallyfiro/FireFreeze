@@ -28,7 +28,8 @@ You can call it by using
 ```java
 FreezeProfile profile = new FreezeProfile(playerObject);
 
-profile.setFrozen(boolean) //true to freeze, false to unfreeze
-profile.isFrozen() //return true if the player is frozen
-profile.freezeTeleport(Player staff, LocationType type) //Send a player to the freeze location
+profile.freeze(); //To freeze the player
+profile.unfreeze(); //To unfreeze the player
+profile.forceUnfreeze(); //It's just a normal unfreeze but with the EntryType set to FORCED
+profile.getWhoFroze(); //Returns the staff member who froze the player
 ```
