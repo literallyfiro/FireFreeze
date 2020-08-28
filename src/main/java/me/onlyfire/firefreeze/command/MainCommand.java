@@ -75,7 +75,8 @@ public class MainCommand implements CommandExecutor {
                 }
 
                 case "update": {
-                    sender.sendMessage("§cWell, this is a dev build...");
+                    sender.sendMessage("§aChecking for updates...");
+                    plugin.getUpdater().update();
                     break;
                 }
 

@@ -148,15 +148,8 @@ public class Firefreeze extends JavaPlugin {
         return instance;
     }
 
-    public boolean isLaterThanOneDotEight(){
-        return Bukkit.getVersion().contains("1.9")
-                || Bukkit.getVersion().contains("1.10")
-                || Bukkit.getVersion().contains("1.11")
-                || Bukkit.getVersion().contains("1.12")
-                || Bukkit.getVersion().contains("1.13")
-                || Bukkit.getVersion().contains("1.14")
-                || Bukkit.getVersion().contains("1.15")
-                || Bukkit.getVersion().contains("1.16");
+    public boolean newVersionCheck(){
+        return (!Bukkit.getVersion().equals("1.7") || !Bukkit.getVersion().equals("1.8"));
     }
 
 

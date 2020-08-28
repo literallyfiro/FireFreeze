@@ -2,7 +2,6 @@ name: FireFreeze
 version: ${project.version}
 main: me.onlyfire.firefreeze.Firefreeze
 api-version: 1.13
-softdepend: [StrikePractice]
 authors: [ImOnlyFire]
 description: The best freeze plugin!
 commands:

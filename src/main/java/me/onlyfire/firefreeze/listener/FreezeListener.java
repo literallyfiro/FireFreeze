@@ -52,7 +52,7 @@ public class FreezeListener implements Listener {
             Bukkit.getPluginManager().callEvent(quitEvent);
 
             for (String cmds : plugin.getConfigFile().getStringList("freeze_settings.console_quit_command")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmds);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmds.replace("{PLAYER}", player.getName()));
             }
 
 

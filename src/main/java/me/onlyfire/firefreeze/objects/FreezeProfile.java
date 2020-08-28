@@ -17,9 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -157,7 +155,7 @@ public class FreezeProfile {
                         .createEffect(Integer.MAX_VALUE, plugin.getConfigFile().getInt("freeze_methods.freeze_effect.power")));
 
 
-            if (plugin.isLaterThanOneDotEight()){
+            if (plugin.newVersionCheck()){
                 if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")){
                     player.setGlowing(true);
                 }
@@ -201,7 +199,7 @@ public class FreezeProfile {
 
             }
 
-            if (plugin.isLaterThanOneDotEight()){
+            if (plugin.newVersionCheck()){
                 if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")){
                     player.setGlowing(false);
                 }
