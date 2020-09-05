@@ -41,7 +41,11 @@ public class FreezeProfile {
 
     private void setFrozen(@NonNull Player staff, boolean frozen, boolean forced) {
         if (frozen){
-            plugin.getFrozenPlayers().put(staff.getUniqueId(), player.getUniqueId());
+            plugin.getFrozenPlayers().add(player.getUniqueId());
+            plugin.getConnection().addFreeze(player, staff);
+
+            useMethods(staff, true);
+
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.FREEZE);
 
             for (String cmds : plugin.getConfigFile().getStringList("freeze_settings.console_freeze_command")) {
@@ -49,9 +53,6 @@ public class FreezeProfile {
                         .replace("{PLAYER}", player.getName())
                         .replace("{STAFF}", staff.getName()));
             }
-
-
-            useMethods(staff, true);
 
             for (Player pl : plugin.getServer().getOnlinePlayers()) {
                 if (pl.hasPermission("firefreeze.staff")) {
@@ -68,7 +69,11 @@ public class FreezeProfile {
             plugin.getServer().getPluginManager().callEvent(addEvent);
 
         }else {
-            plugin.getFrozenPlayers().remove(staff.getUniqueId(), player.getUniqueId());
+            plugin.getFrozenPlayers().remove(player.getUniqueId());
+
+            useMethods(staff, false);
+
+            plugin.getConnection().removeFreeze(player);
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.UNFREEZE);
 
             for (String cmds : plugin.getConfigFile().getStringList("freeze_settings.console_unfreeze_command")) {
@@ -76,8 +81,6 @@ public class FreezeProfile {
                         .replace("{PLAYER}", player.getName())
                         .replace("{STAFF}", staff.getName()));
             }
-
-            useMethods(staff, false);
 
             for (Player pl : plugin.getServer().getOnlinePlayers()) {
                 if (pl.hasPermission("firefreeze.staff")) {
@@ -208,20 +211,12 @@ public class FreezeProfile {
     }
 
     public Player getWhoFroze(){
-        Player whoFroze = null;
-
-        for (UUID key : plugin.getFrozenPlayers().keySet()){
-            if (Objects.equals(plugin.getFrozenPlayers().get(key), player.getUniqueId())){
-                whoFroze = Bukkit.getPlayer(key);
-            }
-        }
-
-        return whoFroze;
+        return plugin.getConnection().getWhoFroze(player);
 
     }
 
     public boolean isFrozen(){
-        return plugin.getFrozenPlayers().containsValue(player.getUniqueId());
+        return plugin.getFrozenPlayers().contains(player.getUniqueId());
     }
 
 }

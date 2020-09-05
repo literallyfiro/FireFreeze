@@ -7,14 +7,17 @@ import me.onlyfire.firefreeze.methods.FreezeGUI;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -118,9 +121,15 @@ public class FreezeListener implements Listener {
         Player player = event.getPlayer();
         FreezeProfile profile = new FreezeProfile(player);
 
-        if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_interaction")) {
-            event.setCancelled(true);
+        if (event.getItem() == null) return;
+        if (event.getClickedBlock() == null) return;
+
+        if (profile.isFrozen()){
+            if (plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_interaction")) {
+               event.setCancelled(true);
+           }
         }
+
     }
 
     @EventHandler
@@ -133,7 +142,7 @@ public class FreezeListener implements Listener {
 
             FreezeProfile profile = new FreezeProfile(player);
 
-            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_attack")) {
+            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_damage")) {
                 event.setCancelled(true);
             }
         }
@@ -143,7 +152,7 @@ public class FreezeListener implements Listener {
 
             FreezeProfile profile = new FreezeProfile(player);
 
-            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_attack")) {
+            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_damage")) {
                 event.setCancelled(true);
             }
         }
@@ -169,7 +178,7 @@ public class FreezeListener implements Listener {
 
             FreezeProfile profile = new FreezeProfile(player);
 
-            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_attack")) {
+            if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_damage")) {
                 event.setCancelled(true);
             }
         }
@@ -185,6 +194,23 @@ public class FreezeListener implements Listener {
 
         if (profile.isFrozen()) {
             if (event.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
+                event.setCancelled(true);
+            }
+
+            if (plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_inventory_click")) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onOpen(InventoryOpenEvent event) {
+        Player player = (Player) event.getPlayer();
+        FreezeProfile profile = new FreezeProfile(player);
+
+        if (profile.isFrozen()) {
+            if (!plugin.getConfigFile().getBoolean("freeze_methods.gui.enable") &&
+                    plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_inventory_open")) {
                 event.setCancelled(true);
             }
         }

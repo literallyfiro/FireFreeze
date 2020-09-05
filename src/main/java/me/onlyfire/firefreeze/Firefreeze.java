@@ -34,10 +34,8 @@ public class Firefreeze extends JavaPlugin {
 
     private SQLConnection connection;
 
-    //Player (UUID) staff - Player (UUID) frozen
-    private Map<UUID, UUID> frozenPlayers = new HashMap<>();
+    private List<UUID> frozenPlayers = new ArrayList<>();
 
-    //Player (UUID) frozen - AnydeskTask task
     private Map<UUID, AnydeskTask> anydeskTask = new HashMap<>();
 
     private FreezeMainTask mainTask;
@@ -69,7 +67,9 @@ public class Firefreeze extends JavaPlugin {
     @Override
     public void onDisable() {
         for (FreezeProfile profiles : getAllPlayers()){
-            if (profiles.isFrozen()) profiles.forceUnfreeze(profiles.getWhoFroze());
+            if (profiles.isFrozen())
+                if (profiles.getWhoFroze() != null)
+                    profiles.forceUnfreeze(profiles.getWhoFroze());
         }
         closeAll();
     }

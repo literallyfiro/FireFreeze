@@ -101,14 +101,17 @@ freeze_methods:
 
 freeze_settings:
   # You can disable movements when a player is frozen
-  # Ex. disable_chat: true will allow the player to chat
+  # Ex. disable_chat: false will allow the player to chat
   onFreeze:
     disable_movements: true
     disable_chat: false
     disable_commands: false
     disable_drop: true
     disable_interaction: true
-    disable_attack: true
+    disable_damage: true
+    #These 2 will be disabled by default if you use the freeze GUI method !!
+    disable_inventory_click: true
+    disable_inventory_open: true
 
   # When a player gets frozen, the console will execute a command
   # Use console_freeze_command: [] to disable

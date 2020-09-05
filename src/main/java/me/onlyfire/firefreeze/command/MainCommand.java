@@ -18,7 +18,7 @@ public class MainCommand implements CommandExecutor {
 
     String[] help = new String[]{
             "",
-            ChatColor.translateAlternateColorCodes('&', "&4Fire&cFreeze &7(v2.1)"),
+            ChatColor.translateAlternateColorCodes('&', "&4Fire&cFreeze &7(v2.1.2)"),
             "",
             ChatColor.translateAlternateColorCodes('&', "&c/firefreeze arguments:"),
             ChatColor.translateAlternateColorCodes('&', " &c|- &freload &4- &cReloads the plugin"),
@@ -104,7 +104,8 @@ public class MainCommand implements CommandExecutor {
                 case "unfreezeall": {
                     for (FreezeProfile profiles : plugin.getAllPlayers()) {
                         if (profiles.isFrozen())
-                            profiles.forceUnfreeze(profiles.getWhoFroze());
+                            if (profiles.getWhoFroze() != null)
+                                 profiles.forceUnfreeze(profiles.getWhoFroze());
                     }
                     sender.sendMessage("§aSuccesfully unfroze all the online players!");
                     break;

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class SQLConnection {
 
@@ -62,6 +63,28 @@ public class SQLConnection {
                 }
             }
         }
+
+        PreparedStatement st1 = null;
+
+        try {
+            st1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS frozenPlayers " +
+                    "(" +
+                    "frozen VARCHAR(50) NOT NULL, " +
+                    "staff VARCHAR(25) NOT NULL" +
+                    ")");
+
+            st1.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally {
+            if (st1 != null) {
+                try {
+                    st1.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+        }
     }
 
     public void addEntry(Player player, String staff, EntryType type) {
@@ -90,6 +113,122 @@ public class SQLConnection {
             }
         }
 
+    }
+
+    public Player getWhoFroze(Player player){
+        PreparedStatement st = null;
+        ResultSet result = null;
+        Player whoFroze = null;
+
+        try {
+            st = connection.prepareStatement("SELECT staff FROM frozenPlayers WHERE frozen = ?");
+
+            st.setString(1, player.getUniqueId().toString());
+
+            result = st.executeQuery();
+
+            if (result.next()){
+                whoFroze = Bukkit.getPlayer(UUID.fromString(result.getString(1)));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+        }
+        return whoFroze;
+    }
+
+    public void addFreeze(Player player, Player staff){
+        PreparedStatement st = null;
+
+        if (!isFrozen(player)) {
+            try {
+                st = connection.prepareStatement("INSERT INTO frozenPlayers (frozen, staff) VALUES (?,?)");
+
+                st.setString(1, player.getUniqueId().toString());
+                st.setString(2, staff.getUniqueId().toString());
+
+                st.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                if (st != null) {
+                    try {
+                        st.close();
+                    } catch (SQLException ex2) {
+                        ex2.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeFreeze(Player player){
+        PreparedStatement st = null;
+
+        try {
+            st = connection.prepareStatement("DELETE FROM frozenPlayers WHERE frozen = ?");
+
+            st.setString(1, player.getUniqueId().toString());
+
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public boolean isFrozen(Player player){
+        PreparedStatement st = null;
+        ResultSet result = null;
+
+        try {
+            st = connection.prepareStatement("SELECT frozen FROM frozenPlayers WHERE frozen = ?");
+
+            st.setString(1, player.getUniqueId().toString());
+
+            result = st.executeQuery();
+
+            return result.next();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     public FreezeHistory searchFreezeHistoryFor(String player){
