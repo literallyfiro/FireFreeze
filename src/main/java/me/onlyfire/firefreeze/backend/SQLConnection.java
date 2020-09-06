@@ -39,7 +39,7 @@ public class SQLConnection {
         createTable();
     }
 
-    void createTable(){
+    void createTable() {
         PreparedStatement st = null;
 
         try {
@@ -54,7 +54,7 @@ public class SQLConnection {
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -76,7 +76,7 @@ public class SQLConnection {
             st1.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st1 != null) {
                 try {
                     st1.close();
@@ -103,7 +103,7 @@ public class SQLConnection {
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -115,7 +115,7 @@ public class SQLConnection {
 
     }
 
-    public Player getWhoFroze(Player player){
+    public Player getWhoFroze(Player player) {
         PreparedStatement st = null;
         ResultSet result = null;
         Player whoFroze = null;
@@ -127,12 +127,12 @@ public class SQLConnection {
 
             result = st.executeQuery();
 
-            if (result.next()){
+            if (result.next()) {
                 whoFroze = Bukkit.getPlayer(UUID.fromString(result.getString(1)));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -151,7 +151,7 @@ public class SQLConnection {
         return whoFroze;
     }
 
-    public void addFreeze(Player player, Player staff){
+    public void addFreeze(Player player, Player staff) {
         PreparedStatement st = null;
 
         if (!isFrozen(player)) {
@@ -176,7 +176,7 @@ public class SQLConnection {
         }
     }
 
-    public void removeFreeze(Player player){
+    public void removeFreeze(Player player) {
         PreparedStatement st = null;
 
         try {
@@ -187,7 +187,7 @@ public class SQLConnection {
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -198,7 +198,7 @@ public class SQLConnection {
         }
     }
 
-    public boolean isFrozen(Player player){
+    public boolean isFrozen(Player player) {
         PreparedStatement st = null;
         ResultSet result = null;
 
@@ -212,7 +212,7 @@ public class SQLConnection {
             return result.next();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -231,7 +231,7 @@ public class SQLConnection {
         return false;
     }
 
-    public FreezeHistory searchFreezeHistoryFor(String player){
+    public FreezeHistory searchFreezeHistoryFor(String player) {
         PreparedStatement st = null;
         ResultSet result = null;
         FreezeHistory history = null;
@@ -247,7 +247,7 @@ public class SQLConnection {
 
             result = st.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
                 staffList.add(result.getString("staff"));
                 timeList.add(result.getString("date"));
             }
@@ -255,7 +255,7 @@ public class SQLConnection {
             history = new FreezeHistory(staffList, timeList, player);
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -285,7 +285,7 @@ public class SQLConnection {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();
@@ -304,7 +304,7 @@ public class SQLConnection {
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally {
+        } finally {
             if (st != null) {
                 try {
                     st.close();

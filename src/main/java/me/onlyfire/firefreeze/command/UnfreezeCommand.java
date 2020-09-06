@@ -2,7 +2,7 @@ package me.onlyfire.firefreeze.command;
 
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
-import org.bukkit.ChatColor;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,39 +19,35 @@ public class UnfreezeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.only_players")));
+            sender.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.only_players")));
             return true;
         }
 
         if (!sender.hasPermission("firefreeze.unfreeze")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.not_permission")));
+            sender.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.not_permission")));
             return true;
         }
 
         if (args.length != 1) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.incorrect_usage")
-                            .replace("{COMMAND}", "/unfreeze <player>")));
+            sender.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.incorrect_usage")
+                    .replace("{COMMAND}", "/unfreeze <player>")));
             return true;
         }
 
         Player target = plugin.getServer().getPlayerExact(args[0]);
 
         if (target == sender) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
             return true;
         }
 
         if (target == null) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
             return true;
         }
 
         if (target.hasPermission("firefreeze.exempt")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_player")));
+            sender.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_player")));
             return true;
         }
 
@@ -59,7 +55,7 @@ public class UnfreezeCommand implements CommandExecutor {
         FreezeProfile profile = new FreezeProfile(target);
 
         if (!profile.isFrozen()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_unfrozen")
+            player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_unfrozen")
                     .replace("{PLAYER}", target.getName())));
             return true;
         }

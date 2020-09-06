@@ -8,7 +8,7 @@ public enum EntryType {
 
     private String s;
 
-    public String toName(){
+    public String toName() {
         return s;
     }
 }

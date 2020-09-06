@@ -7,7 +7,7 @@ import java.lang.reflect.Constructor;
 
 public class FreezeTitle extends Reflection {
 
-    public void send(Player player, String title, String subtitle, int fadeInTime, int showTime, int fadeOutTime){
+    public void send(Player player, String title, String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
         try {
             Object chatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class)
                     .invoke(null, "{\"text\": \"" + title + "\"}");

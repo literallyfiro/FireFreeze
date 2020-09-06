@@ -5,16 +5,15 @@ import me.onlyfire.firefreeze.enums.EntryType;
 import me.onlyfire.firefreeze.events.PlayerFreezeQuitEvent;
 import me.onlyfire.firefreeze.methods.FreezeGUI;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -30,13 +29,13 @@ public class FreezeListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event){
-        if (plugin.getUpdater().updateAvailable()){
+    public void onJoin(PlayerJoinEvent event) {
+        if (plugin.getUpdater().updateAvailable()) {
             for (Player players : Bukkit.getOnlinePlayers()) {
                 if (players.hasPermission("firefreeze.admin")) {
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             "&4[FireFreeze] &cFound an update on SpigotMC! " +
-                            "Please download it at &4https://www.spigotmc.org/resources/77105/"));
+                                    "Please download it at &4https://www.spigotmc.org/resources/77105/"));
                 }
             }
         }
@@ -61,7 +60,7 @@ public class FreezeListener implements Listener {
 
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 if (pl.hasPermission("firefreeze.staff")) {
-                    pl.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getMessagesFile().getString("staff_broadcast.quit")
+                    pl.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("staff_broadcast.quit")
                             .replace("{PLAYER}", player.getName())));
                 }
             }
@@ -124,10 +123,10 @@ public class FreezeListener implements Listener {
         if (event.getItem() == null) return;
         if (event.getClickedBlock() == null) return;
 
-        if (profile.isFrozen()){
+        if (profile.isFrozen()) {
             if (plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_interaction")) {
-               event.setCancelled(true);
-           }
+                event.setCancelled(true);
+            }
         }
 
     }
@@ -193,7 +192,7 @@ public class FreezeListener implements Listener {
         if (event.getClickedInventory() == null) return;
 
         if (profile.isFrozen()) {
-            if (event.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
+            if (event.getView().getTitle().equals(ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
                 event.setCancelled(true);
             }
 
@@ -224,7 +223,7 @@ public class FreezeListener implements Listener {
         if (event.getInventory() == null) return;
 
         if (profile.isFrozen()) {
-            if (event.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
+            if (event.getView().getTitle().equals(ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

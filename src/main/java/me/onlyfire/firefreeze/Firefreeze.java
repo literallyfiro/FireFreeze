@@ -6,15 +6,15 @@ import me.onlyfire.firefreeze.command.FreezeCommand;
 import me.onlyfire.firefreeze.command.FreezeHistoryCommand;
 import me.onlyfire.firefreeze.command.MainCommand;
 import me.onlyfire.firefreeze.command.UnfreezeCommand;
+import me.onlyfire.firefreeze.config.FireFreezeConfiguration;
 import me.onlyfire.firefreeze.listener.FreezeListener;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
 import me.onlyfire.firefreeze.tasks.AnydeskTask;
 import me.onlyfire.firefreeze.tasks.FreezeMainTask;
-import me.onlyfire.firefreeze.config.FireFreezeConfiguration;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import me.onlyfire.firefreeze.utils.FireFreezeUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,18 +29,16 @@ public class Firefreeze extends JavaPlugin {
     private FireFreezeConfiguration configFile;
     private FireFreezeConfiguration messagesFile;
     private FireFreezeConfiguration locationFile;
-
     private FireFreezeUpdater updater;
-
     private SQLConnection connection;
-
     private List<UUID> frozenPlayers = new ArrayList<>();
-
     private Map<UUID, AnydeskTask> anydeskTask = new HashMap<>();
-
     private FreezeMainTask mainTask;
-
     private String prefix;
+
+    public static Firefreeze getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -49,7 +47,7 @@ public class Firefreeze extends JavaPlugin {
         setupStorage();
         loadCommandsAndListeners();
 
-        this.prefix = ChatColor.translateAlternateColorCodes('&', getMessagesFile().getString("prefix"));
+        this.prefix = ColorUtil.colorize(getMessagesFile().getString("prefix"));
         this.mainTask = new FreezeMainTask(this);
 
         this.updater = new FireFreezeUpdater(this, 77105);
@@ -66,7 +64,7 @@ public class Firefreeze extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (FreezeProfile profiles : getAllPlayers()){
+        for (FreezeProfile profiles : getAllPlayers()) {
             if (profiles.isFrozen())
                 if (profiles.getWhoFroze() != null)
                     profiles.forceUnfreeze(profiles.getWhoFroze());
@@ -74,13 +72,13 @@ public class Firefreeze extends JavaPlugin {
         closeAll();
     }
 
-    private void setupStorage(){
+    private void setupStorage() {
         this.configFile = new FireFreezeConfiguration("config.yml");
         this.messagesFile = new FireFreezeConfiguration("messages.yml");
         this.locationFile = new FireFreezeConfiguration("locations.yml");
 
-        switch (configFile.getString("storage_type").toLowerCase()){
-            case "sqlite":{
+        switch (configFile.getString("storage_type").toLowerCase()) {
+            case "sqlite": {
                 try {
                     this.connection = new SQLConnection();
                 } catch (SQLException | ClassNotFoundException ex) {
@@ -90,7 +88,7 @@ public class Firefreeze extends JavaPlugin {
                 break;
             }
 
-            case "mysql":{
+            case "mysql": {
                 try {
                     this.connection = new SQLConnection(
                             configFile.getString("mysql_configuration.host"),
@@ -104,7 +102,7 @@ public class Firefreeze extends JavaPlugin {
                 }
                 break;
             }
-            default:{
+            default: {
                 getServer().getConsoleSender().sendMessage("§c[FireFreeze] Could not find correct database! Be sure to use sqlite or mysql in the config!");
                 onDisable();
                 break;
@@ -113,7 +111,7 @@ public class Firefreeze extends JavaPlugin {
         getServer().getConsoleSender().sendMessage("§a[FireFreeze] Connection estabilished!");
     }
 
-    private void loadCommandsAndListeners(){
+    private void loadCommandsAndListeners() {
         getCommand("freeze").setExecutor(new FreezeCommand(this));
         getCommand("freezehistory").setExecutor(new FreezeHistoryCommand(this));
         getCommand("unfreeze").setExecutor(new UnfreezeCommand(this));
@@ -122,7 +120,7 @@ public class Firefreeze extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FreezeListener(this), this);
     }
 
-    private void closeAll(){
+    private void closeAll() {
         if (this.mainTask != null) this.mainTask.cancel();
 
         try {
@@ -133,10 +131,10 @@ public class Firefreeze extends JavaPlugin {
         }
     }
 
-    public List<FreezeProfile> getAllPlayers(){
+    public List<FreezeProfile> getAllPlayers() {
         List<FreezeProfile> list = new ArrayList<>();
 
-        for (Player player : Bukkit.getOnlinePlayers()){
+        for (Player player : Bukkit.getOnlinePlayers()) {
             FreezeProfile profile = new FreezeProfile(player);
             list.add(profile);
         }
@@ -144,11 +142,7 @@ public class Firefreeze extends JavaPlugin {
         return list;
     }
 
-    public static Firefreeze getInstance() {
-        return instance;
-    }
-
-    public boolean newVersionCheck(){
+    public boolean newVersionCheck() {
         return (!Bukkit.getVersion().equals("1.7") || !Bukkit.getVersion().equals("1.8"));
     }
 

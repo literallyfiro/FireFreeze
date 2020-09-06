@@ -1,7 +1,6 @@
 package me.onlyfire.firefreeze.utils;
 
 import me.onlyfire.firefreeze.Firefreeze;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,12 +22,12 @@ public class ItemBuilder {
         this.lore = new ArrayList<>();
     }
 
-    public ItemBuilder setPath(String path){
+    public ItemBuilder setPath(String path) {
         this.path = path;
         return this;
     }
 
-    public ItemBuilder setMaterial(Material material){
+    public ItemBuilder setMaterial(Material material) {
         this.item = new ItemStack(material);
         this.meta = item.getItemMeta();
         return this;
@@ -41,7 +40,7 @@ public class ItemBuilder {
 
     public ItemBuilder setName(String name) {
         this.name = name;
-        this.meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+        this.meta.setDisplayName(ColorUtil.colorize(name));
         return this;
     }
 
@@ -50,7 +49,7 @@ public class ItemBuilder {
             List<String> coloredLore = new ArrayList<>();
 
             for (String s : lore) {
-                coloredLore.add(ChatColor.translateAlternateColorCodes('&', s));
+                coloredLore.add(ColorUtil.colorize(s));
             }
 
             this.lore = coloredLore;

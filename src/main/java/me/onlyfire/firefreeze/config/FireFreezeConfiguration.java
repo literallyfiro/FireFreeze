@@ -23,7 +23,7 @@ public class FireFreezeConfiguration {
         saveDefaultConfig();
     }
 
-    public void saveDefaultConfig(){
+    public void saveDefaultConfig() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
         }
@@ -44,11 +44,11 @@ public class FireFreezeConfiguration {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void reloadConfig(){
+    public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void saveConfig(){
+    public void saveConfig() {
         try {
             config.save(file);
         } catch (IOException e) {
@@ -56,31 +56,31 @@ public class FireFreezeConfiguration {
         }
     }
 
-    public void set(String path, Object value){
+    public void set(String path, Object value) {
         config.set(path, value);
     }
 
-    public String getString(String path){
+    public String getString(String path) {
         return config.getString(path);
     }
 
-    public boolean getBoolean(String path){
+    public boolean getBoolean(String path) {
         return config.getBoolean(path);
     }
 
-    public double getDouble(String path){
+    public double getDouble(String path) {
         return config.getDouble(path);
     }
 
-    public int getInt(String path){
+    public int getInt(String path) {
         return config.getInt(path);
     }
 
-    public List<String> getStringList(String path){
+    public List<String> getStringList(String path) {
         return config.getStringList(path);
     }
 
-    public ConfigurationSection getSection(String path){
+    public ConfigurationSection getSection(String path) {
         return config.getConfigurationSection(path);
     }
 

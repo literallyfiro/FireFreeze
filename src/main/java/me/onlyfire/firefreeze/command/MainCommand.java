@@ -2,7 +2,7 @@ package me.onlyfire.firefreeze.command;
 
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
-import org.bukkit.ChatColor;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,61 +10,57 @@ import org.bukkit.entity.Player;
 
 public class MainCommand implements CommandExecutor {
 
+    String[] help = new String[]{
+            "",
+            ColorUtil.colorize("&4Fire&cFreeze &7(v2.1.2)"),
+            "",
+            ColorUtil.colorize("&c/firefreeze arguments:"),
+            ColorUtil.colorize(" &c|- &freload &4- &cReloads the plugin"),
+            ColorUtil.colorize(" &c|- &fupdate &4- &cChecks for updates"),
+            ColorUtil.colorize(" &c|- &frestoredata &4- &cDeletes ALL the entries"),
+            ColorUtil.colorize(" &c|- &fremovedata <player> &4- &cDeletes all the entries for a specified player"),
+            ColorUtil.colorize(" &c|- &funfreezeall &4- &cUnfreezes all the players"),
+            ColorUtil.colorize(" &c|- &fsetpos <frozen|staff|final> &4- &cSets the positions"),
+            ColorUtil.colorize(" &c|- &fclearpos <frozen|staff|final|all> &4- &cClears a position"),
+            "",
+            ColorUtil.colorize("&cOther commands:"),
+            ColorUtil.colorize("&f/freezehistory &4- &cSee the freeze history for a player"),
+            ""
+    };
+    String[] setPosHelp = new String[]{
+            "",
+            ColorUtil.colorize("&c/firefreeze setpos arguments:"),
+            ColorUtil.colorize(" &c|- &ffrozen &4- &cSets the frozen spawn"),
+            ColorUtil.colorize(" &c|- &fstaff &4- &cSets the staff spawn"),
+            ColorUtil.colorize(" &c|- &ffinal &4- &cSets the final spawn"),
+            ""
+    };
+    String[] clearPosHelp = new String[]{
+            "",
+            ColorUtil.colorize("&c/firefreeze clearpos arguments:"),
+            ColorUtil.colorize(" &c|- &ffrozen &4- &cClears the frozen spawn"),
+            ColorUtil.colorize(" &c|- &fstaff &4- &cClears the staff spawn"),
+            ColorUtil.colorize(" &c|- &ffinal &4- &cClears the final spawn"),
+            ColorUtil.colorize(" &c|- &fall &4- &cClears all positions"),
+            ""
+    };
     private Firefreeze plugin;
 
-    public MainCommand(Firefreeze plugin){
+    public MainCommand(Firefreeze plugin) {
         this.plugin = plugin;
     }
 
-    String[] help = new String[]{
-            "",
-            ChatColor.translateAlternateColorCodes('&', "&4Fire&cFreeze &7(v2.1.2)"),
-            "",
-            ChatColor.translateAlternateColorCodes('&', "&c/firefreeze arguments:"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &freload &4- &cReloads the plugin"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fupdate &4- &cChecks for updates"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &frestoredata &4- &cDeletes ALL the entries"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fremovedata <player> &4- &cDeletes all the entries for a specified player"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &funfreezeall &4- &cUnfreezes all the players"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fsetpos <frozen|staff|final> &4- &cSets the positions"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fclearpos <frozen|staff|final|all> &4- &cClears a position"),
-            "",
-            ChatColor.translateAlternateColorCodes('&', "&cOther commands:"),
-            ChatColor.translateAlternateColorCodes('&', "&f/freezehistory &4- &cSee the freeze history for a player"),
-            ""
-    };
-
-    String[] setPosHelp = new String[]{
-            "",
-            ChatColor.translateAlternateColorCodes('&', "&c/firefreeze setpos arguments:"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &ffrozen &4- &cSets the frozen spawn"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fstaff &4- &cSets the staff spawn"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &ffinal &4- &cSets the final spawn"),
-            ""
-    };
-
-    String[] clearPosHelp = new String[]{
-            "",
-            ChatColor.translateAlternateColorCodes('&', "&c/firefreeze clearpos arguments:"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &ffrozen &4- &cClears the frozen spawn"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fstaff &4- &cClears the staff spawn"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &ffinal &4- &cClears the final spawn"),
-            ChatColor.translateAlternateColorCodes('&', " &c|- &fall &4- &cClears all positions"),
-            ""
-    };
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("firefreeze.admin")){
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.not_permission")));
+        if (!sender.hasPermission("firefreeze.admin")) {
+            sender.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.not_permission")));
             return true;
         }
 
 
-        if (args.length == 1){
+        if (args.length == 1) {
 
-            switch (args[0]){
+            switch (args[0]) {
 
                 case "reload": {
                     plugin.getServer().getPluginManager().disablePlugin(plugin);
@@ -80,17 +76,17 @@ public class MainCommand implements CommandExecutor {
                     break;
                 }
 
-                case "help":{
+                case "help": {
                     sender.sendMessage(help);
                     break;
                 }
 
-                case "setpos":{
+                case "setpos": {
                     sender.sendMessage(setPosHelp);
                     break;
                 }
 
-                case "clearpos":{
+                case "clearpos": {
                     sender.sendMessage(clearPosHelp);
                     break;
                 }
@@ -105,7 +101,7 @@ public class MainCommand implements CommandExecutor {
                     for (FreezeProfile profiles : plugin.getAllPlayers()) {
                         if (profiles.isFrozen())
                             if (profiles.getWhoFroze() != null)
-                                 profiles.forceUnfreeze(profiles.getWhoFroze());
+                                profiles.forceUnfreeze(profiles.getWhoFroze());
                     }
                     sender.sendMessage("§aSuccesfully unfroze all the online players!");
                     break;
@@ -121,13 +117,12 @@ public class MainCommand implements CommandExecutor {
         }
 
 
-
-        if (args.length == 2){
+        if (args.length == 2) {
 
             if (args[0].equalsIgnoreCase("removedata")) {
                 final Player target = this.plugin.getServer().getPlayerExact(args[1]);
                 if (target == null) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getPrefix() + this.plugin.getMessagesFile().getString("errors.player_not_found")));
+                    sender.sendMessage(ColorUtil.colorize(this.plugin.getPrefix() + this.plugin.getMessagesFile().getString("errors.player_not_found")));
                     return true;
                 }
                 this.plugin.getConnection().removeEntriesFor(target.getName());
@@ -138,8 +133,7 @@ public class MainCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("setpos")) {
 
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            plugin.getMessagesFile().getString("errors.only_players")));
+                    sender.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("errors.only_players")));
                     return true;
                 }
 
@@ -196,7 +190,7 @@ public class MainCommand implements CommandExecutor {
 
                 }
 
-            }else if (args[0].equalsIgnoreCase("clearpos")){
+            } else if (args[0].equalsIgnoreCase("clearpos")) {
 
                 switch (args[1]) {
 
@@ -277,7 +271,7 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
 
-            }else {
+            } else {
                 sender.sendMessage("§cUnrecognized command! Use /firefreeze help for a list of commands");
             }
             return true;

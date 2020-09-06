@@ -1,7 +1,6 @@
 package me.onlyfire.firefreeze.events;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,9 +10,13 @@ public class PlayerFreezeRemoveEvent extends Event {
     private Player staff;
     private Player frozen;
 
-    public PlayerFreezeRemoveEvent(Player staff, Player frozen){
+    public PlayerFreezeRemoveEvent(Player staff, Player frozen) {
         this.staff = staff;
         this.frozen = frozen;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Player getStaff() {
@@ -22,10 +25,6 @@ public class PlayerFreezeRemoveEvent extends Event {
 
     public Player getFrozen() {
         return frozen;
-    }
-
-    public static HandlerList getHandlerList(){
-        return handlers;
     }
 
     @Override

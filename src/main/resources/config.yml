@@ -81,10 +81,10 @@ freeze_methods:
       - "&6Do not log out or you will be banned"
       - "&7&m-------------------------------------"
     unfroze_message:
-        - "&7&m-----------------------"
-        - "&aYou have been unfrozen!"
-        - "&aYou can now play again!"
-        - "&7&m-----------------------"
+      - "&7&m-----------------------"
+      - "&aYou have been unfrozen!"
+      - "&aYou can now play again!"
+      - "&7&m-----------------------"
 
   # The frozen player and the executor will be teleported to a specified location
   # /firefreeze setPos to set the positions

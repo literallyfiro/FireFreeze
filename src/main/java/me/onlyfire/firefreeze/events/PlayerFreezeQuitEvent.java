@@ -9,16 +9,16 @@ public class PlayerFreezeQuitEvent extends Event {
 
     private Player frozen;
 
-    public PlayerFreezeQuitEvent(Player frozen){
+    public PlayerFreezeQuitEvent(Player frozen) {
         this.frozen = frozen;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Player getFrozen() {
         return frozen;
-    }
-
-    public static HandlerList getHandlerList(){
-        return handlers;
     }
 
     @Override

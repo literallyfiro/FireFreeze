@@ -3,7 +3,7 @@ package me.onlyfire.firefreeze.tasks;
 import lombok.Setter;
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
-import org.bukkit.ChatColor;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,7 +40,7 @@ public class AnydeskTask extends BukkitRunnable {
             if (accepted) {
                 for (Player pl : plugin.getServer().getOnlinePlayers()) {
                     if (pl.hasPermission("firefreeze.staff")) {
-                        pl.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.accepted")
+                        pl.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.accepted")
                                 .replace("{PLAYER}", frozen.getName())
                                 .replace("{ID}", message)));
                     }
@@ -52,7 +52,7 @@ public class AnydeskTask extends BukkitRunnable {
                 if (!accepted) {
                     for (Player pl : plugin.getServer().getOnlinePlayers()) {
                         if (pl.hasPermission("firefreeze.staff")) {
-                            pl.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.refused")
+                            pl.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.refused")
                                     .replace("{PLAYER}", frozen.getName())));
                         }
                     }
@@ -79,7 +79,7 @@ public class AnydeskTask extends BukkitRunnable {
                     if (!accepted) {
                         for (Player pl : plugin.getServer().getOnlinePlayers()) {
                             if (pl.hasPermission("firefreeze.staff")) {
-                                pl.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.accepted")
+                                pl.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("anydesk_task.accepted")
                                         .replace("{PLAYER}", frozen.getName())
                                         .replace("{ID}", message)));
                             }

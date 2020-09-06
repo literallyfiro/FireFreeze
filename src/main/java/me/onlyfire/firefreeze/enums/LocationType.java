@@ -14,8 +14,8 @@ public enum LocationType {
             Firefreeze.getInstance().getLocationFile().getDouble("frozen.x"),
             Firefreeze.getInstance().getLocationFile().getDouble("frozen.y"),
             Firefreeze.getInstance().getLocationFile().getDouble("frozen.z"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("frozen.yaw"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("frozen.pitch"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("frozen.yaw"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("frozen.pitch"),
             Firefreeze.getInstance().getLocationFile().getBoolean("frozen.use"),
             "Frozen"
     ),
@@ -25,8 +25,8 @@ public enum LocationType {
             Firefreeze.getInstance().getLocationFile().getDouble("staff.x"),
             Firefreeze.getInstance().getLocationFile().getDouble("staff.y"),
             Firefreeze.getInstance().getLocationFile().getDouble("staff.z"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("staff.yaw"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("staff.pitch"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("staff.yaw"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("staff.pitch"),
             Firefreeze.getInstance().getLocationFile().getBoolean("staff.use"),
             "Staff"
     ),
@@ -37,8 +37,8 @@ public enum LocationType {
             Firefreeze.getInstance().getLocationFile().getDouble("final.x"),
             Firefreeze.getInstance().getLocationFile().getDouble("final.y"),
             Firefreeze.getInstance().getLocationFile().getDouble("final.z"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("final.yaw"),
-            (float)Firefreeze.getInstance().getLocationFile().getDouble("final.pitch"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("final.yaw"),
+            (float) Firefreeze.getInstance().getLocationFile().getDouble("final.pitch"),
             Firefreeze.getInstance().getLocationFile().getBoolean("final.use"),
             "Final"
     );

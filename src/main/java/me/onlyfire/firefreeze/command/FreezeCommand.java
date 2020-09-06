@@ -2,6 +2,7 @@ package me.onlyfire.firefreeze.command;
 
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
+import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,12 +40,12 @@ public class FreezeCommand implements CommandExecutor {
         Player target = plugin.getServer().getPlayerExact(args[0]);
 
         if (target == null) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
             return true;
         }
 
-        if (target == sender){
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
+        if (target == sender) {
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
             return true;
         }
 
@@ -63,7 +64,7 @@ public class FreezeCommand implements CommandExecutor {
                 profile.unfreeze(player);
 
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_frozen")
+                player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_frozen")
                         .replace("{PLAYER}", target.getName())));
                 return true;
             }
