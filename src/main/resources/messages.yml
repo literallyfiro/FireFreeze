@@ -14,6 +14,7 @@ errors:
   cannot_attack_others: "&cYou can't attack other players when you are frozen."
   cannot_freeze_player: "&cYou can't freeze/unfreeze that player!"
   cannot_freeze_yourself: "&cYou can't freeze/unfreeze yourself!"
+  cannot_freeze_more: "&cYou can't freeze more than one player!"
 
 unfreeze:
   player_unfrozen: "&aSuccessfully unfroze {PLAYER}."

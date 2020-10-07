@@ -10,6 +10,8 @@ import me.onlyfire.firefreeze.events.PlayerFreezeAddEvent;
 import me.onlyfire.firefreeze.events.PlayerFreezeRemoveEvent;
 import me.onlyfire.firefreeze.methods.FreezeGUI;
 import me.onlyfire.firefreeze.methods.FreezeTitle;
+import me.onlyfire.firefreeze.scoreboard.FreezeBoard;
+import me.onlyfire.firefreeze.tags.FreezeTags;
 import me.onlyfire.firefreeze.tasks.AnydeskTask;
 import me.onlyfire.firefreeze.utils.ColorUtil;
 import org.bukkit.Bukkit;
@@ -123,6 +125,14 @@ public class FreezeProfile {
             if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable"))
                 plugin.getAnydeskTask().put(player.getUniqueId(), new AnydeskTask(player));
 
+            if (plugin.getScoreboardFile().getBoolean("enable_freeze_scoreboard")) {
+                FreezeBoard.getInstance().createScoreboard(player, staff);
+            }
+
+            if (plugin.getConfigFile().getBoolean("freeze_methods.tab_prefix_suffix.enable")) {
+                new FreezeTags(plugin.getConfigFile().getString("freeze_methods.tab_prefix_suffix.provider")).setPrefix(player);
+            }
+
             if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_teleport")) {
                 //Staff teleport
                 freezeTeleport(staff, LocationType.STAFF);
@@ -146,17 +156,15 @@ public class FreezeProfile {
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.normal_chat.enable")) {
-
                 for (String s : plugin.getConfigFile().getStringList("freeze_methods.normal_chat.froze_message"))
                     player.sendMessage(ColorUtil.colorize(s));
-
             }
+
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_effect.enable"))
                 player.addPotionEffect(PotionEffectType.getByName(
                         plugin.getConfigFile().getString("freeze_methods.freeze_effect.name"))
                         .createEffect(Integer.MAX_VALUE, plugin.getConfigFile().getInt("freeze_methods.freeze_effect.power")));
-
 
             if (plugin.newVersionCheck()) {
                 if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")) {
@@ -164,10 +172,22 @@ public class FreezeProfile {
                 }
             }
 
+            if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
+                plugin.getFreezeChat().put(staff.getUniqueId(), player.getUniqueId());
+            }
+
 
         } else {
             if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable"))
                 plugin.getAnydeskTask().remove(player.getUniqueId());
+
+            if (plugin.getScoreboardFile().getBoolean("enable_freeze_scoreboard")) {
+                FreezeBoard.getInstance().deleteScoreboard(player);
+            }
+
+            if (plugin.getConfigFile().getBoolean("freeze_methods.tab_prefix_suffix.enable")) {
+                new FreezeTags(plugin.getConfigFile().getString("freeze_methods.tab_prefix_suffix.provider")).removePrefix(player);
+            }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_teleport")) {
                 //Staff teleport
@@ -175,6 +195,10 @@ public class FreezeProfile {
 
                 //Target Teleport
                 freezeTeleport(player, LocationType.FINAL);
+            }
+
+            if (plugin.getConfigFile().getBoolean("freeze_methods.tab_prefix_suffix.enable")) {
+                player.setPlayerListName(player.getName());
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_effect.enable"))
@@ -206,11 +230,21 @@ public class FreezeProfile {
                     player.setGlowing(false);
                 }
             }
+
+            if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
+                plugin.getFreezeChat().remove(staff.getUniqueId(), player.getUniqueId());
+            }
+
         }
     }
 
     public Player getWhoFroze() {
         return plugin.getConnection().getWhoFroze(player);
+
+    }
+
+    public Player getFroze() {
+        return plugin.getConnection().getFroze(player);
 
     }
 

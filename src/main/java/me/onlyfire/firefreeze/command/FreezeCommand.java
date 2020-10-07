@@ -24,14 +24,16 @@ public class FreezeCommand implements CommandExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("firefreeze.freeze")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+        Player player = (Player) sender;
+
+        if (!player.hasPermission("firefreeze.freeze")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     plugin.getPrefix() + plugin.getMessagesFile().getString("errors.not_permission")));
             return true;
         }
 
         if (args.length != 1) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     plugin.getPrefix() + plugin.getMessagesFile().getString("errors.incorrect_usage")
                             .replace("{COMMAND}", "/freeze <player>")));
             return true;
@@ -40,39 +42,40 @@ public class FreezeCommand implements CommandExecutor {
         Player target = plugin.getServer().getPlayerExact(args[0]);
 
         if (target == null) {
-            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
+            player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
             return true;
         }
 
-        if (target == sender) {
-            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
+        if (target == player) {
+            player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
             return true;
         }
 
         if (target.hasPermission("firefreeze.exempt")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_player")));
+            player.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_player")));
             return true;
         }
 
-        Player player = (Player) sender;
+        if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
+            if (plugin.getFreezeChat().containsKey(player.getUniqueId())) {
+                player.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_more")));
+                return true;
+            }
+        }
+
         FreezeProfile profile = new FreezeProfile(target);
 
         if (profile.isFrozen()) {
             if (plugin.getConfigFile().getBoolean("command_settings.merge_freeze_with_unfreeeze")) {
-
                 profile.unfreeze(player);
-
             } else {
                 player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_frozen")
                         .replace("{PLAYER}", target.getName())));
-                return true;
             }
             return true;
         }
 
         profile.freeze(player);
-
         return true;
     }
 }

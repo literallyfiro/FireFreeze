@@ -68,6 +68,15 @@ freeze_methods:
         lore:
           - "&aYou can add other items now!"
 
+  # The freeze chat will work as a separate chat from the "global chat"
+  # WARNING: enabling the freeze_chat will force the staff to freeze ONLY 1 player at once
+  # WARNING: You NEED to set 'disable_chat' on false!
+  freeze_chat:
+    enable: false
+    # This will disable the chat for the cheater and the staff member
+    disable_global_chat: true
+    frozen_message: "&4&lFROZEN &c{player}: &f{message}"
+    staff_message: "&a&lSTAFF &a{player}: &f{message}"
 
   # If this is set to true, firefreeze will use a chat message
   # The frozen player will see a normal chat message until he gets unfrozen
@@ -92,6 +101,14 @@ freeze_methods:
 
   # The server will give glowing effect to the frozen player
   enable_freeze_glowing: false
+
+  tab_prefix_suffix:
+    enable: true
+    # NAMETAGEDIT is the only available provider
+    # In the future I will add more providers (same as the scoreboard)
+    provider: NAMETAGEDIT
+    prefix: "&4FROZEN "
+    suffix: ""
 
   # If you set this to true, the server will set an effect when a player gets frozen
   freeze_effect:
@@ -131,7 +148,6 @@ freeze_settings:
     - "ban {PLAYER} Cheating"
 
 other_settings:
-  enable_bstats: true
   enable_autoupdater: true
   time_set: "yyyy-MM-dd HH:mm:ss"
 

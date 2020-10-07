@@ -1,0 +1,8 @@
+enable_freeze_scoreboard: false
+title: "&4&lFROZEN"
+lines:
+  - "&7You have been frozen by a staff member"
+  - "&7Please give the anydesk id in chat"
+  - ""
+  - ""
+  - "&6Do not log out or you will be banned"

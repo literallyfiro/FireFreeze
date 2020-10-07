@@ -9,6 +9,8 @@ import me.onlyfire.firefreeze.command.UnfreezeCommand;
 import me.onlyfire.firefreeze.config.FireFreezeConfiguration;
 import me.onlyfire.firefreeze.listener.FreezeListener;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
+import me.onlyfire.firefreeze.objects.FreezeTag;
+import me.onlyfire.firefreeze.scoreboard.FreezeBoard;
 import me.onlyfire.firefreeze.tasks.AnydeskTask;
 import me.onlyfire.firefreeze.tasks.FreezeMainTask;
 import me.onlyfire.firefreeze.utils.ColorUtil;
@@ -17,6 +19,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -29,10 +32,14 @@ public class Firefreeze extends JavaPlugin {
     private FireFreezeConfiguration configFile;
     private FireFreezeConfiguration messagesFile;
     private FireFreezeConfiguration locationFile;
+    private FireFreezeConfiguration scoreboardFile;
     private FireFreezeUpdater updater;
     private SQLConnection connection;
     private List<UUID> frozenPlayers = new ArrayList<>();
+    private Map<UUID, FreezeBoard.ScoreBoardUpdater> scoreboardPlayers = new HashMap<>();
     private Map<UUID, AnydeskTask> anydeskTask = new HashMap<>();
+    private Map<UUID, UUID> freezeChat = new HashMap<>();
+    private Map<UUID, FreezeTag> prefixSuffix = new HashMap<>();
     private FreezeMainTask mainTask;
     private String prefix;
 
@@ -49,17 +56,15 @@ public class Firefreeze extends JavaPlugin {
 
         this.prefix = ColorUtil.colorize(getMessagesFile().getString("prefix"));
         this.mainTask = new FreezeMainTask(this);
-
         this.updater = new FireFreezeUpdater(this, 77105);
 
         if (getConfigFile().getBoolean("other_settings.enable_autoupdater")) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> updater.update(), 7200 * 20, 7200 * 20);
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> updater.update(), 80L, 7200 * 20);
         }
 
-        if (configFile.getBoolean("other_settings.enable_bstats"))
-            new Metrics(this, 7133);
-
         this.mainTask.runTaskTimerAsynchronously(this, 5L, 60L);
+
+        new Metrics(this, 7133);
     }
 
     @Override
@@ -76,6 +81,7 @@ public class Firefreeze extends JavaPlugin {
         this.configFile = new FireFreezeConfiguration("config.yml");
         this.messagesFile = new FireFreezeConfiguration("messages.yml");
         this.locationFile = new FireFreezeConfiguration("locations.yml");
+        this.scoreboardFile = new FireFreezeConfiguration("scoreboard.yml");
 
         switch (configFile.getString("storage_type").toLowerCase()) {
             case "sqlite": {

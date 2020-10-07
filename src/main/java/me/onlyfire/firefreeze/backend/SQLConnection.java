@@ -151,6 +151,42 @@ public class SQLConnection {
         return whoFroze;
     }
 
+    public Player getFroze(Player player) {
+        PreparedStatement st = null;
+        ResultSet result = null;
+        Player whoFroze = null;
+
+        try {
+            st = connection.prepareStatement("SELECT frozen FROM frozenPlayers WHERE staff = ?");
+
+            st.setString(1, player.getUniqueId().toString());
+
+            result = st.executeQuery();
+
+            if (result.next()) {
+                whoFroze = Bukkit.getPlayer(UUID.fromString(result.getString(1)));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+        }
+        return whoFroze;
+    }
+
     public void addFreeze(Player player, Player staff) {
         PreparedStatement st = null;
 

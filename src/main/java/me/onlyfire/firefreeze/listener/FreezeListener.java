@@ -6,11 +6,13 @@ import me.onlyfire.firefreeze.events.PlayerFreezeQuitEvent;
 import me.onlyfire.firefreeze.methods.FreezeGUI;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
 import me.onlyfire.firefreeze.utils.ColorUtil;
+import me.onlyfire.firefreeze.utils.MapUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -19,6 +21,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
 
 public class FreezeListener implements Listener {
 
@@ -80,6 +84,50 @@ public class FreezeListener implements Listener {
     }
 
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onFreezeChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        FreezeProfile profile = new FreezeProfile(player);
+
+        if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
+
+            // Staff
+            if (plugin.getFreezeChat().containsKey(player.getUniqueId())) {
+                event.setCancelled(true);
+                Player frozen = Bukkit.getPlayer(plugin.getFreezeChat().get(player.getUniqueId()));
+
+                frozen.sendMessage(ColorUtil.colorize(
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
+                        .replace("{player}", player.getName())
+                        .replace("{message}", event.getMessage()));
+
+                player.sendMessage(ColorUtil.colorize(
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
+                        .replace("{player}", player.getName())
+                        .replace("{message}", event.getMessage()));
+
+            }
+
+            // Cheater
+            if (plugin.getFreezeChat().containsValue(player.getUniqueId())) {
+                event.setCancelled(true);
+                UUID uuid = MapUtil.getKeyFromValue(plugin.getFreezeChat(), player.getUniqueId());
+                Player staff = Bukkit.getPlayer(uuid);
+
+                player.sendMessage(ColorUtil.colorize(
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
+                        .replace("{player}", player.getName())
+                        .replace("{message}", event.getMessage()));
+
+                staff.sendMessage(ColorUtil.colorize(
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
+                        .replace("{player}", player.getName())
+                        .replace("{message}", event.getMessage()));
+
+            }
+        }
+    }
+
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -87,10 +135,23 @@ public class FreezeListener implements Listener {
 
         if (profile.isFrozen()) {
             if (!plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_chat")) {
-                if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable"))
+                if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable")) {
                     plugin.getAnydeskTask().get(player.getUniqueId()).setMessage(event.getMessage());
+                }
             } else {
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void chatDisable(AsyncPlayerChatEvent event) {
+        if (plugin.getConfigFile().getBoolean("freeze_methods.disable_global_chat")) {
+            for (Player players : Bukkit.getOnlinePlayers()) {
+                if (plugin.getFreezeChat().containsKey(players.getUniqueId())
+                        || plugin.getFreezeChat().containsValue(players.getUniqueId())) {
+                    event.getRecipients().remove(players);
+                }
             }
         }
     }
