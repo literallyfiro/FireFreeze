@@ -3,6 +3,7 @@ package me.onlyfire.firefreeze.command;
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
 import me.onlyfire.firefreeze.utils.ColorUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ public class MainCommand implements CommandExecutor {
 
     String[] help = new String[]{
             "",
-            ColorUtil.colorize("&4Fire&cFreeze &7(v2.1.2)"),
+            ColorUtil.colorize("&4Fire&cFreeze &7(v2.2)"),
             "",
             ColorUtil.colorize("&c/firefreeze arguments:"),
             ColorUtil.colorize(" &c|- &freload &4- &cReloads the plugin"),
@@ -73,6 +74,12 @@ public class MainCommand implements CommandExecutor {
                 case "update": {
                     sender.sendMessage("§aChecking for updates...");
                     plugin.getUpdater().update();
+                    if (plugin.getUpdater().updateAvailable()) {
+                        sender.sendMessage(ColorUtil.colorize("&4[FireFreeze] &cFound an update on SpigotMC! " +
+                                        "Please download it at &4https://www.spigotmc.org/resources/77105/"));
+                    } else {
+                        sender.sendMessage("§aNo update found.");
+                    }
                     break;
                 }
 
@@ -277,7 +284,7 @@ public class MainCommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage("§4Fire§cFreeze §7(v2.1) | §cType /firefreeze help for a list of commands");
+        sender.sendMessage("§4Fire§cFreeze §7(v2.2) | §cType /firefreeze help for a list of commands");
         return true;
 
     }

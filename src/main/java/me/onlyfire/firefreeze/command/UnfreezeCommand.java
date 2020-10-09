@@ -55,7 +55,7 @@ public class UnfreezeCommand implements CommandExecutor {
         FreezeProfile profile = new FreezeProfile(target);
 
         if (!profile.isFrozen()) {
-            player.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_unfrozen")
+            player.sendMessage(ColorUtil.colorizePAPI(player, Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_already_unfrozen")
                     .replace("{PLAYER}", target.getName())));
             return true;
         }

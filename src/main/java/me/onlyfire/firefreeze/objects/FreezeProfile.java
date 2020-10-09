@@ -59,7 +59,7 @@ public class FreezeProfile {
             for (Player pl : plugin.getServer().getOnlinePlayers()) {
                 if (pl.hasPermission("firefreeze.staff")) {
                     if (pl != staff)
-                        pl.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("staff_broadcast.froze")
+                        pl.sendMessage(ColorUtil.colorizePAPI(player, plugin.getMessagesFile().getString("staff_broadcast.froze")
                                 .replace("{STAFF}", staff.getName()).replace("{PLAYER}", player.getName())));
                 }
             }
@@ -157,7 +157,7 @@ public class FreezeProfile {
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.normal_chat.enable")) {
                 for (String s : plugin.getConfigFile().getStringList("freeze_methods.normal_chat.froze_message"))
-                    player.sendMessage(ColorUtil.colorize(s));
+                    player.sendMessage(ColorUtil.colorizePAPI(player, s).replace("{staff}", staff.getName()));
             }
 
 
@@ -197,10 +197,6 @@ public class FreezeProfile {
                 freezeTeleport(player, LocationType.FINAL);
             }
 
-            if (plugin.getConfigFile().getBoolean("freeze_methods.tab_prefix_suffix.enable")) {
-                player.setPlayerListName(player.getName());
-            }
-
             if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_effect.enable"))
                 player.removePotionEffect(Objects.requireNonNull(PotionEffectType.getByName(plugin.getConfigFile().getString("freeze_methods.freeze_effect.name"))));
 
@@ -221,7 +217,7 @@ public class FreezeProfile {
             if (plugin.getConfigFile().getBoolean("freeze_methods.normal_chat.enable")) {
 
                 for (String s : plugin.getConfigFile().getStringList("freeze_methods.normal_chat.unfroze_message"))
-                    player.sendMessage(ColorUtil.colorize(s));
+                    player.sendMessage(ColorUtil.colorizePAPI(player, s).replace("{staff}", staff.getName()));
 
             }
 

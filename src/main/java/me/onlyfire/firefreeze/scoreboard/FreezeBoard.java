@@ -29,7 +29,7 @@ public class FreezeBoard {
 
             int size = this.plugin.getScoreboardFile().getStringList("lines").size();
             for (String s : this.plugin.getScoreboardFile().getStringList("lines")) {
-                objective.getScore(ColorUtil.colorize(s)
+                objective.getScore(ColorUtil.colorizePAPI(player, s)
                         .replace("{staff}", staff.getName()))
                         .setScore(size);
                 size--;
@@ -76,12 +76,10 @@ public class FreezeBoard {
 
                 if (plugin.getScoreboardFile().getBoolean("enable_freeze_scoreboard")) {
                     Objective objective = scoreboard.getObjective("firefreezescore");
-//                    objective.setDisplayName(ColorUtil.colorize(plugin.getScoreboardFile().getString("title")));
-//                    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                     int size = this.plugin.getScoreboardFile().getStringList("lines").size();
                     for (String s : this.plugin.getScoreboardFile().getStringList("lines")) {
-                        objective.getScore(ColorUtil.colorize(s)
+                        objective.getScore(ColorUtil.colorizePAPI(player, s)
                                 .replace("{staff}", staff.getName()))
                                 .setScore(size);
                         size--;

@@ -1,14 +1,13 @@
 package me.onlyfire.firefreeze.objects;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public class FreezeTag {
     private String prefix;
     private String suffix;
-
-    public FreezeTag(String prefix, String suffix) {
-        this.prefix = prefix;
-        this.suffix = suffix;
-    }
+    private String firstPrefix;
+    private String firstSuffix;
 }

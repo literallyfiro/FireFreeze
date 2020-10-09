@@ -64,7 +64,7 @@ public class FreezeListener implements Listener {
 
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 if (pl.hasPermission("firefreeze.staff")) {
-                    pl.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("staff_broadcast.quit")
+                    pl.sendMessage(ColorUtil.colorizePAPI(player, plugin.getMessagesFile().getString("staff_broadcast.quit")
                             .replace("{PLAYER}", player.getName())));
                 }
             }
@@ -96,12 +96,12 @@ public class FreezeListener implements Listener {
                 event.setCancelled(true);
                 Player frozen = Bukkit.getPlayer(plugin.getFreezeChat().get(player.getUniqueId()));
 
-                frozen.sendMessage(ColorUtil.colorize(
+                frozen.sendMessage(ColorUtil.colorizePAPI(frozen,
                         plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
-                player.sendMessage(ColorUtil.colorize(
+                player.sendMessage(ColorUtil.colorizePAPI(player,
                         plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
@@ -114,12 +114,12 @@ public class FreezeListener implements Listener {
                 UUID uuid = MapUtil.getKeyFromValue(plugin.getFreezeChat(), player.getUniqueId());
                 Player staff = Bukkit.getPlayer(uuid);
 
-                player.sendMessage(ColorUtil.colorize(
+                player.sendMessage(ColorUtil.colorizePAPI(player,
                         plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
-                staff.sendMessage(ColorUtil.colorize(
+                staff.sendMessage(ColorUtil.colorizePAPI(staff,
                         plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));

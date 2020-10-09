@@ -34,7 +34,7 @@ public class FreezeMainTask extends BukkitRunnable {
                 if (plugin.getConfigFile().getBoolean("freeze_methods.normal_chat.enable")) {
 
                     for (String s : plugin.getConfigFile().getStringList("freeze_methods.normal_chat.froze_message"))
-                        player.sendMessage(ColorUtil.colorize(s));
+                        player.sendMessage(ColorUtil.colorizePAPI(player, s).replace("{staff}", profile.getWhoFroze().getName()));
 
                 }
             }

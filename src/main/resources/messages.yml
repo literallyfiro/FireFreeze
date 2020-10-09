@@ -5,7 +5,7 @@ prefix: "&c&lFire&4&lFreeze &7| "
 
 errors:
   not_permission: "&cYou don't have permissions to execute this command."
-  incorrect_usage: "&cCorrect Syntax: /freeze <player>"
+  incorrect_usage: "&cCorrect Syntax: {COMMAND}"
   only_players: "&cYou can't execute this command from console"
   player_not_found: "&cThat player is not online."
   player_already_frozen: "&cThat player is already frozen!"

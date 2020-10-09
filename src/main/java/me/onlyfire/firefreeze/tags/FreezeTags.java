@@ -22,7 +22,10 @@ public class FreezeTags {
         switch (provider.toLowerCase()) {
             case "nametagedit":
                 if (Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
-                    Firefreeze.getInstance().getPrefixSuffix().put(player.getUniqueId(), new FreezeTag(prefix, suffix));
+                    String firstPrefix = NametagEdit.getApi().getNametag(player).getPrefix();
+                    String firstSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
+                    Firefreeze.getInstance().getPrefixSuffix().put(player.getUniqueId(), new FreezeTag(prefix, suffix, firstPrefix, firstSuffix));
+
                     NametagEdit.getApi().setPrefix(player, prefix);
                     NametagEdit.getApi().setSuffix(player, suffix);
                 }
@@ -37,8 +40,8 @@ public class FreezeTags {
         switch (provider.toLowerCase()) {
             case "nametagedit":
                 if (Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
-                    NametagEdit.getApi().setPrefix(player, Firefreeze.getInstance().getPrefixSuffix().get(player.getUniqueId()).getPrefix());
-                    NametagEdit.getApi().setSuffix(player, Firefreeze.getInstance().getPrefixSuffix().get(player.getUniqueId()).getSuffix());
+                    NametagEdit.getApi().setPrefix(player, Firefreeze.getInstance().getPrefixSuffix().get(player.getUniqueId()).getFirstPrefix());
+                    NametagEdit.getApi().setSuffix(player, Firefreeze.getInstance().getPrefixSuffix().get(player.getUniqueId()).getFirstSuffix());
                     Firefreeze.getInstance().getPrefixSuffix().remove(player.getUniqueId());
                 }
                 break;

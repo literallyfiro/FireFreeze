@@ -34,7 +34,7 @@ public class FreezeHistoryCommand implements CommandExecutor {
         }
 
         FreezeHistory history = plugin.getConnection().searchFreezeHistoryFor(args[0]);
-        history.sendTo(sender);
+        history.sendTo((Player) sender);
         return true;
     }
 }

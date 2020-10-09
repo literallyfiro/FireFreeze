@@ -56,13 +56,6 @@ public class FreezeCommand implements CommandExecutor {
             return true;
         }
 
-        if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
-            if (plugin.getFreezeChat().containsKey(player.getUniqueId())) {
-                player.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_more")));
-                return true;
-            }
-        }
-
         FreezeProfile profile = new FreezeProfile(target);
 
         if (profile.isFrozen()) {
@@ -73,6 +66,13 @@ public class FreezeCommand implements CommandExecutor {
                         .replace("{PLAYER}", target.getName())));
             }
             return true;
+        }
+
+        if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
+            if (plugin.getFreezeChat().containsKey(player.getUniqueId())) {
+                player.sendMessage(ColorUtil.colorize(plugin.getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_more")));
+                return true;
+            }
         }
 
         profile.freeze(player);

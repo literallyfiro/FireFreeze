@@ -6,7 +6,7 @@
 
     <groupId>me.onlyfire</groupId>
     <artifactId>firefreeze</artifactId>
-    <version>2.1.2</version>
+    <version>2.2</version>
     <packaging>jar</packaging>
 
     <name>FireFreeze</name>
@@ -76,6 +76,10 @@
             <id>upstream</id>
             <url>http://ci.nametagedit.com/plugin/repository/everything/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,6 +105,12 @@
             <groupId>com.nametagedit</groupId>
             <artifactId>nametagedit</artifactId>
             <version>4.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
