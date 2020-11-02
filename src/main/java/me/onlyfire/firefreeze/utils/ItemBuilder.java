@@ -12,14 +12,10 @@ public class ItemBuilder {
 
     private ItemStack item;
     private ItemMeta meta;
-    private String name;
-    private List<String> lore;
     private String path;
 
     public ItemBuilder() {
-        this.name = "";
         this.path = "";
-        this.lore = new ArrayList<>();
     }
 
     public ItemBuilder setPath(String path) {
@@ -39,7 +35,6 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setName(String name) {
-        this.name = name;
         this.meta.setDisplayName(ColorUtil.colorize(name));
         return this;
     }
@@ -52,7 +47,6 @@ public class ItemBuilder {
                 coloredLore.add(ColorUtil.colorize(s));
             }
 
-            this.lore = coloredLore;
             this.meta.setLore(coloredLore);
         }
         return this;

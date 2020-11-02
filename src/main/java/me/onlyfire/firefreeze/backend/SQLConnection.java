@@ -23,23 +23,22 @@ public class SQLConnection {
         Class.forName("com.mysql.jdbc.Driver");
         this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=yes", user, psw);
         Bukkit.getConsoleSender().sendMessage("§a[FireFreeze] MySQL Connection selected!");
-        createTable();
+        this.createTable();
     }
 
     public SQLConnection() throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         File file = new File(Firefreeze.getInstance().getDataFolder() + "/database/database.db");
 
-        if (!file.getParentFile().exists())
-            file.getParentFile().mkdir();
+        if (!file.getParentFile().exists()) file.getParentFile().mkdir();
 
         this.connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
         Bukkit.getConsoleSender().sendMessage("§a[FireFreeze] SQLite Connection selected!");
-        SQLiteDownloader.download();
-        createTable();
+        new SQLiteDownloader().download();
+        this.createTable();
     }
 
-    void createTable() {
+    private void createTable() {
         PreparedStatement st = null;
 
         try {

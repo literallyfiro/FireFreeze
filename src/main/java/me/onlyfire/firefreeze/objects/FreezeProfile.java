@@ -46,7 +46,7 @@ public class FreezeProfile {
             plugin.getFrozenPlayers().add(player.getUniqueId());
             plugin.getConnection().addFreeze(player, staff);
 
-            useMethods(staff, true);
+            useFreeze(staff, true);
 
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.FREEZE);
 
@@ -72,7 +72,7 @@ public class FreezeProfile {
         } else {
             plugin.getFrozenPlayers().remove(player.getUniqueId());
 
-            useMethods(staff, false);
+            useFreeze(staff, false);
 
             plugin.getConnection().removeFreeze(player);
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.UNFREEZE);
@@ -118,7 +118,7 @@ public class FreezeProfile {
 
     }
 
-    private void useMethods(Player staff, boolean freeze) {
+    private void useFreeze(Player staff, boolean freeze) {
         if (freeze) {
             if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable"))
                 plugin.getAnydeskTask().put(player.getUniqueId(), new AnydeskTask(player));
@@ -144,9 +144,7 @@ public class FreezeProfile {
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.titles.enable")) {
-                FreezeTitle title = new FreezeTitle();
-
-                title.send(player,
+                new FreezeTitle().send(player,
                         ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.titles.freeze_title")),
                         ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.titles.freeze_subtitle")),
                         5, 20, 5);
@@ -201,9 +199,7 @@ public class FreezeProfile {
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.titles.enable")) {
-                FreezeTitle title = new FreezeTitle();
-
-                title.send(player,
+                new FreezeTitle().send(player,
                         ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.titles.unfreeze_title")),
                         ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.titles.unfreeze_subtitle")),
                         5, 20, 5);
@@ -211,16 +207,12 @@ public class FreezeProfile {
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.normal_chat.enable")) {
-
                 for (String s : plugin.getConfigFile().getStringList("freeze_methods.normal_chat.unfroze_message"))
                     player.sendMessage(ColorUtil.colorizePAPI(player, s).replace("{staff}", staff.getName()));
-
             }
 
-            if (plugin.newVersionCheck()) {
-                if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")) {
-                    player.setGlowing(false);
-                }
+            if (plugin.newVersionCheck() && plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")) {
+                player.setGlowing(false);
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {

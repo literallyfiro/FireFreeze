@@ -12,7 +12,7 @@ import java.nio.channels.ReadableByteChannel;
 
 public class SQLiteDownloader {
 
-    public static void download() {
+    public void download() {
         File file = new File(Firefreeze.getInstance().getDataFolder() + "/database/sqlite-jdbc-3.30.1.jar");
 
         if (!file.exists()) {

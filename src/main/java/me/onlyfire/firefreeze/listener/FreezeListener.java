@@ -19,7 +19,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
@@ -85,7 +92,6 @@ public class FreezeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onFreezeChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        FreezeProfile profile = new FreezeProfile(player);
 
         if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
 
