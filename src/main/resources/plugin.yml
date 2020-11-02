@@ -1,7 +1,7 @@
 name: FireFreeze
 version: ${project.version}
 main: me.onlyfire.firefreeze.Firefreeze
-api-version: 1.13
+api-version: 1.16
 authors: [ImOnlyFire]
 softdepend:
   - NametagEdit

@@ -76,10 +76,8 @@ public class FreezeListener implements Listener {
         Player player = event.getPlayer();
         FreezeProfile profile = new FreezeProfile(player);
 
-        if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_movements")) {
-            if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getZ() != event.getTo().getZ()) {
-                event.setTo(event.getFrom());
-            }
+        if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_movements") && (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getZ() != event.getTo().getZ())) {
+            event.setTo(event.getFrom());
         }
     }
 
@@ -184,10 +182,8 @@ public class FreezeListener implements Listener {
         if (event.getItem() == null) return;
         if (event.getClickedBlock() == null) return;
 
-        if (profile.isFrozen()) {
-            if (plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_interaction")) {
-                event.setCancelled(true);
-            }
+        if (profile.isFrozen() && plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_interaction")) {
+            event.setCancelled(true);
         }
 
     }
@@ -268,11 +264,9 @@ public class FreezeListener implements Listener {
         Player player = (Player) event.getPlayer();
         FreezeProfile profile = new FreezeProfile(player);
 
-        if (profile.isFrozen()) {
-            if (!plugin.getConfigFile().getBoolean("freeze_methods.gui.enable") &&
-                    plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_inventory_open")) {
-                event.setCancelled(true);
-            }
+        if (profile.isFrozen() && (!plugin.getConfigFile().getBoolean("freeze_methods.gui.enable") &&
+                plugin.getConfigFile().getBoolean("freeze_settings.onFreeze.disable_inventory_open"))) {
+            event.setCancelled(true);
         }
     }
 
@@ -283,15 +277,13 @@ public class FreezeListener implements Listener {
 
         if (event.getInventory() == null) return;
 
-        if (profile.isFrozen()) {
-            if (event.getView().getTitle().equals(ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        new FreezeGUI().add(player);
-                    }
-                }.runTaskLater(plugin, 1L);
-            }
+        if (profile.isFrozen() && event.getView().getTitle().equals(ColorUtil.colorize(plugin.getConfigFile().getString("freeze_methods.gui.name")))) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    new FreezeGUI().add(player);
+                }
+            }.runTaskLater(plugin, 1L);
         }
     }
 

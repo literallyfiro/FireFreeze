@@ -3,7 +3,6 @@ package me.onlyfire.firefreeze.command;
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.objects.FreezeProfile;
 import me.onlyfire.firefreeze.utils.ColorUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class MainCommand implements CommandExecutor {
 
-    String[] help = new String[]{
+    private String[] help = new String[]{
             "",
             ColorUtil.colorize("&4Fire&cFreeze &7(v2.2)"),
             "",
@@ -28,7 +27,7 @@ public class MainCommand implements CommandExecutor {
             ColorUtil.colorize("&f/freezehistory &4- &cSee the freeze history for a player"),
             ""
     };
-    String[] setPosHelp = new String[]{
+    private String[] setPosHelp = new String[]{
             "",
             ColorUtil.colorize("&c/firefreeze setpos arguments:"),
             ColorUtil.colorize(" &c|- &ffrozen &4- &cSets the frozen spawn"),
@@ -36,7 +35,7 @@ public class MainCommand implements CommandExecutor {
             ColorUtil.colorize(" &c|- &ffinal &4- &cSets the final spawn"),
             ""
     };
-    String[] clearPosHelp = new String[]{
+    private String[] clearPosHelp = new String[]{
             "",
             ColorUtil.colorize("&c/firefreeze clearpos arguments:"),
             ColorUtil.colorize(" &c|- &ffrozen &4- &cClears the frozen spawn"),
@@ -106,9 +105,8 @@ public class MainCommand implements CommandExecutor {
 
                 case "unfreezeall": {
                     for (FreezeProfile profiles : plugin.getAllPlayers()) {
-                        if (profiles.isFrozen())
-                            if (profiles.getWhoFroze() != null)
-                                profiles.forceUnfreeze(profiles.getWhoFroze());
+                        if (profiles.isFrozen() && profiles.getWhoFroze() != null)
+                            profiles.forceUnfreeze(profiles.getWhoFroze());
                     }
                     sender.sendMessage("§aSuccesfully unfroze all the online players!");
                     break;

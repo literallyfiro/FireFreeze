@@ -36,13 +36,13 @@ public class UnfreezeCommand implements CommandExecutor {
 
         Player target = plugin.getServer().getPlayerExact(args[0]);
 
-        if (target == sender) {
-            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
+        if (target == null) {
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
             return true;
         }
 
-        if (target == null) {
-            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.player_not_found")));
+        if (target.equals(sender)) {
+            sender.sendMessage(ColorUtil.colorize(Firefreeze.getInstance().getPrefix() + plugin.getMessagesFile().getString("errors.cannot_freeze_yourself")));
             return true;
         }
 

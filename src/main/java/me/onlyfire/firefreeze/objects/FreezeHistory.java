@@ -2,7 +2,6 @@ package me.onlyfire.firefreeze.objects;
 
 import me.onlyfire.firefreeze.Firefreeze;
 import me.onlyfire.firefreeze.utils.ColorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;

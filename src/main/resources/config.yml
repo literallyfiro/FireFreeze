@@ -103,7 +103,7 @@ freeze_methods:
   enable_freeze_glowing: false
 
   tab_prefix_suffix:
-    enable: true
+    enable: false
     # NAMETAGEDIT is the only available provider
     # In the future I will add more providers (same as the scoreboard)
     provider: NAMETAGEDIT

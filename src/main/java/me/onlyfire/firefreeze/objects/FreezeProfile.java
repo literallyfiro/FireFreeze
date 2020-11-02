@@ -57,10 +57,9 @@ public class FreezeProfile {
             }
 
             for (Player pl : plugin.getServer().getOnlinePlayers()) {
-                if (pl.hasPermission("firefreeze.staff")) {
-                    if (pl != staff)
-                        pl.sendMessage(ColorUtil.colorizePAPI(player, plugin.getMessagesFile().getString("staff_broadcast.froze")
-                                .replace("{STAFF}", staff.getName()).replace("{PLAYER}", player.getName())));
+                if (pl.hasPermission("firefreeze.staff") && !pl.equals(staff)) {
+                    pl.sendMessage(ColorUtil.colorizePAPI(player, plugin.getMessagesFile().getString("staff_broadcast.froze")
+                            .replace("{STAFF}", staff.getName()).replace("{PLAYER}", player.getName())));
                 }
             }
 
@@ -85,10 +84,9 @@ public class FreezeProfile {
             }
 
             for (Player pl : plugin.getServer().getOnlinePlayers()) {
-                if (pl.hasPermission("firefreeze.staff")) {
-                    if (pl != staff)
-                        pl.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("staff_broadcast.unfroze")
-                                .replace("{STAFF}", staff.getName()).replace("{PLAYER}", player.getName())));
+                if (pl.hasPermission("firefreeze.staff") && !pl.equals(staff)) {
+                    pl.sendMessage(ColorUtil.colorize(plugin.getMessagesFile().getString("staff_broadcast.unfroze")
+                            .replace("{STAFF}", staff.getName()).replace("{PLAYER}", player.getName())));
                 }
             }
 
@@ -166,10 +164,8 @@ public class FreezeProfile {
                         plugin.getConfigFile().getString("freeze_methods.freeze_effect.name"))
                         .createEffect(Integer.MAX_VALUE, plugin.getConfigFile().getInt("freeze_methods.freeze_effect.power")));
 
-            if (plugin.newVersionCheck()) {
-                if (plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")) {
-                    player.setGlowing(true);
-                }
+            if (plugin.newVersionCheck() && plugin.getConfigFile().getBoolean("freeze_methods.enable_freeze_glowing")) {
+                player.setGlowing(true);
             }
 
             if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {

@@ -1,6 +1,5 @@
 package me.onlyfire.firefreeze.utils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 

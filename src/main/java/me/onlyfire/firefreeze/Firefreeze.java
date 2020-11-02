@@ -19,7 +19,6 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -70,9 +69,8 @@ public class Firefreeze extends JavaPlugin {
     @Override
     public void onDisable() {
         for (FreezeProfile profiles : getAllPlayers()) {
-            if (profiles.isFrozen())
-                if (profiles.getWhoFroze() != null)
-                    profiles.forceUnfreeze(profiles.getWhoFroze());
+            if (profiles.isFrozen() && profiles.getWhoFroze() != null)
+                profiles.forceUnfreeze(profiles.getWhoFroze());
         }
         closeAll();
     }
