@@ -1,3 +1,6 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fd2a7cf6e1584f819c6b7dea501517d1)](https://app.codacy.com/gh/ImOnlyFire/FireFreeze-3?utm_source=github.com&utm_medium=referral&utm_content=ImOnlyFire/FireFreeze-3&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b55c0281d01d4fa889a66ea1aeec2296)](https://www.codacy.com/gh/ImOnlyFire/FireFreeze/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ImOnlyFire/FireFreeze&amp;utm_campaign=Badge_Grade)
+
 # Overview
 FireFreeze is the best freeze plugin on the market! It has several new features never seen in other plugins, such as anydesk-id task, freeze history, freeze glowing, titles support, and more...
 
