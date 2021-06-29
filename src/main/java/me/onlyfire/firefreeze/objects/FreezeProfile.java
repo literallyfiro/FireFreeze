@@ -14,12 +14,14 @@ import me.onlyfire.firefreeze.scoreboard.FreezeBoard;
 import me.onlyfire.firefreeze.tags.FreezeTags;
 import me.onlyfire.firefreeze.tasks.AnydeskTask;
 import me.onlyfire.firefreeze.utils.ColorUtil;
+import me.onlyfire.firefreeze.utils.MapUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class FreezeProfile {
@@ -27,7 +29,7 @@ public class FreezeProfile {
     @Getter
     private final Player player;
 
-    private Firefreeze plugin = Firefreeze.getInstance();
+    private final Firefreeze plugin = Firefreeze.getInstance();
 
     public void freeze(Player staff) {
         setFrozen(staff, true, false);
@@ -43,15 +45,15 @@ public class FreezeProfile {
 
     private void setFrozen(@NonNull Player staff, boolean frozen, boolean forced) {
         if (frozen) {
-            plugin.getFrozenPlayers().add(player.getUniqueId());
+            plugin.getFrozenPlayers().put(player.getUniqueId(), staff.getUniqueId());
             plugin.getConnection().addFreeze(player, staff);
 
             useFreeze(staff, true);
 
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.FREEZE);
 
-            for (String cmds : plugin.getConfigFile().getStringList("freeze_settings.console_freeze_command")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmds
+            for (String commands : plugin.getConfigFile().getStringList("freeze_settings.console_freeze_command")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands
                         .replace("{PLAYER}", player.getName())
                         .replace("{STAFF}", staff.getName()));
             }
@@ -74,11 +76,16 @@ public class FreezeProfile {
 
             useFreeze(staff, false);
 
-            plugin.getConnection().removeFreeze(player);
+            if (!forced) {
+                plugin.getConnection().removeFreeze(player);
+            } else {
+                plugin.getConnection().removeFreezeForced(player);
+            }
+
             plugin.getConnection().addEntry(player, staff.getName(), forced ? EntryType.FORCED : EntryType.UNFREEZE);
 
-            for (String cmds : plugin.getConfigFile().getStringList("freeze_settings.console_unfreeze_command")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmds
+            for (String commands : plugin.getConfigFile().getStringList("freeze_settings.console_unfreeze_command")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands
                         .replace("{PLAYER}", player.getName())
                         .replace("{STAFF}", staff.getName()));
             }
@@ -166,11 +173,6 @@ public class FreezeProfile {
                 player.setGlowing(true);
             }
 
-            if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
-                plugin.getFreezeChat().put(staff.getUniqueId(), player.getUniqueId());
-            }
-
-
         } else {
             if (plugin.getConfigFile().getBoolean("freeze_methods.anydesk_task.enable"))
                 plugin.getAnydeskTask().remove(player.getUniqueId());
@@ -215,25 +217,17 @@ public class FreezeProfile {
                 player.setGlowing(false);
             }
 
-            if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
-                plugin.getFreezeChat().remove(staff.getUniqueId(), player.getUniqueId());
-            }
-
         }
     }
 
     public Player getWhoFroze() {
-        return plugin.getConnection().getWhoFroze(player);
-
-    }
-
-    public Player getFroze() {
-        return plugin.getConnection().getFroze(player);
-
+        return Bukkit.getPlayer(plugin.getFrozenPlayers().get(player.getUniqueId()));
     }
 
     public boolean isFrozen() {
-        return plugin.getFrozenPlayers().contains(player.getUniqueId());
+        return plugin.getFrozenPlayers().containsKey(player.getUniqueId())
+                && plugin.getFrozenPlayers().get(player.getUniqueId()) != null;
+
     }
 
 }

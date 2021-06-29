@@ -13,38 +13,33 @@ public class ColorUtil {
     private static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
     public static String colorize(String text) {
-        String toReturn = "";
-
         // For HEX Colors
-        if (Bukkit.getVersion().contains("1.16")) {
-            Matcher match = pattern.matcher(text);
-            while (match.find()) {
-                String newText = text.substring(match.start(), match.end());
-                toReturn = text.replace(newText, ChatColor.of(newText) + "");
-                match = pattern.matcher(text);
-            }
-        }
+        // t
+        text = getHEXString(text);
         //Normal colorize
-        return ChatColor.translateAlternateColorCodes('&', toReturn);
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     public static String colorizePAPI(Player player, String text) {
-        String toReturn = "";
-
         // For HEX Colors
-        if (Bukkit.getVersion().contains("1.16")) {
+        text = getHEXString(text);
+        //Normal colorize
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            text = PlaceholderAPI.setPlaceholders(player, text);
+        }
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private static String getHEXString(String text) {
+        if (Bukkit.getVersion().contains("1.16") || Bukkit.getVersion().contains("1.17")) {
             Matcher match = pattern.matcher(text);
             while (match.find()) {
                 String newText = text.substring(match.start(), match.end());
-                toReturn = text.replace(newText, ChatColor.of(newText) + "");
+                text = text.replace(newText, ChatColor.of(newText) + "");
                 match = pattern.matcher(text);
             }
         }
-        //Normal colorize
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            toReturn = PlaceholderAPI.setPlaceholders(player, text);
-        }
-        return ChatColor.translateAlternateColorCodes('&', toReturn);
+        return text;
     }
 
 }

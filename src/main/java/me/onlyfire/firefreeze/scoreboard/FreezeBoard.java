@@ -25,22 +25,9 @@ public class FreezeBoard {
         Scoreboard scoreboard = manager.getNewScoreboard();
 
         if (plugin.getScoreboardFile().getBoolean("enable_freeze_scoreboard")) {
-            Objective objective = scoreboard.registerNewObjective("firefreezescore", "dummy");
-            objective.setDisplayName(ColorUtil.colorize(plugin.getScoreboardFile().getString("title")));
-            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-
-            int size = this.plugin.getScoreboardFile().getStringList("lines").size();
-            for (String s : this.plugin.getScoreboardFile().getStringList("lines")) {
-                objective.getScore(ColorUtil.colorizePAPI(player, s)
-                        .replace("{staff}", staff.getName()))
-                        .setScore(size);
-                size--;
-            }
+            player.setScoreboard(scoreboard);
+            plugin.getScoreboardPlayers().put(player.getUniqueId(), new ScoreBoardUpdater(player, staff));
         }
-
-        player.setScoreboard(scoreboard);
-        plugin.getScoreboardPlayers().put(player.getUniqueId(), new ScoreBoardUpdater(player, staff));
 
     }
 
@@ -64,7 +51,7 @@ public class FreezeBoard {
         public ScoreBoardUpdater(Player player, Player staff) {
             this.player = player;
             this.staff = staff;
-            runTaskTimer(plugin, 5L, 20L);
+            runTaskTimerAsynchronously(plugin, 2L, 20L);
         }
 
         @Override
@@ -76,15 +63,33 @@ public class FreezeBoard {
             FreezeProfile profile = new FreezeProfile(player);
             if (profile.isFrozen()) {
                 Scoreboard scoreboard = player.getScoreboard();
+                if (scoreboard == null) {
+                    scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+                }
 
                 if (plugin.getScoreboardFile().getBoolean("enable_freeze_scoreboard")) {
                     Objective objective = scoreboard.getObjective("firefreezescore");
 
+                    if (objective == null) {
+                        objective = scoreboard.registerNewObjective("firefreezescore", "dummy");
+                        objective.setDisplayName(ColorUtil.colorize(plugin.getScoreboardFile().getString("title")));
+                        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                    }
+
                     int size = this.plugin.getScoreboardFile().getStringList("lines").size();
+                    StringBuilder noLine = new StringBuilder("§r");
+
                     for (String s : this.plugin.getScoreboardFile().getStringList("lines")) {
-                        objective.getScore(ColorUtil.colorizePAPI(player, s)
-                                .replace("{staff}", staff.getName()))
-                                .setScore(size);
+                        if (s.isEmpty() || s.equals("")) {
+                            noLine.append("§r");
+                            objective.getScore(ColorUtil.colorizePAPI(player, noLine.toString())
+                                    .replace("{staff}", staff.getName()))
+                                    .setScore(size);
+                        } else {
+                            objective.getScore(ColorUtil.colorizePAPI(player, s)
+                                    .replace("{staff}", staff.getName()))
+                                    .setScore(size);
+                        }
                         size--;
                     }
                 }

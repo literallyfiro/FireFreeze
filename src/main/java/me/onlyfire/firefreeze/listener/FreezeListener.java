@@ -19,14 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
@@ -42,13 +35,9 @@ public class FreezeListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (plugin.getUpdater().updateAvailable()) {
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                if (players.hasPermission("firefreeze.admin")) {
-                    players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            "&4[FireFreeze] &cFound an update on SpigotMC! " +
-                                    "Please download it at &4https://www.spigotmc.org/resources/77105/"));
-                }
-            }
+            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&4[FireFreeze] &cFound an update on SpigotMC! " +
+                            "Please download it at &4https://www.spigotmc.org/resources/77105/"));
         }
     }
 
@@ -95,36 +84,38 @@ public class FreezeListener implements Listener {
 
         if (plugin.getConfigFile().getBoolean("freeze_methods.freeze_chat.enable")) {
 
-            // Staff
-            if (plugin.getFreezeChat().containsKey(player.getUniqueId())) {
-                event.setCancelled(true);
-                Player frozen = Bukkit.getPlayer(plugin.getFreezeChat().get(player.getUniqueId()));
 
-                frozen.sendMessage(ColorUtil.colorizePAPI(frozen,
-                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
+            // Frozen
+            if (plugin.getFrozenPlayers().containsKey(player.getUniqueId())) {
+                event.setCancelled(true);
+                Player frozen = Bukkit.getPlayer(plugin.getFrozenPlayers().get(player.getUniqueId()));
+
+                player.sendMessage(ColorUtil.colorizePAPI(player,
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
-                player.sendMessage(ColorUtil.colorizePAPI(player,
-                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
+                frozen.sendMessage(ColorUtil.colorizePAPI(frozen,
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
             }
 
-            // Cheater
-            if (plugin.getFreezeChat().containsValue(player.getUniqueId())) {
+            // Staff
+            if (plugin.getFrozenPlayers().containsValue(player.getUniqueId())) {
                 event.setCancelled(true);
-                UUID uuid = MapUtil.getKeyFromValue(plugin.getFreezeChat(), player.getUniqueId());
+                UUID uuid = MapUtil.getKeyFromValue(plugin.getFrozenPlayers(), player.getUniqueId());
+
                 Player staff = Bukkit.getPlayer(uuid);
 
-                player.sendMessage(ColorUtil.colorizePAPI(player,
-                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
+                staff.sendMessage(ColorUtil.colorizePAPI(staff,
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
-                staff.sendMessage(ColorUtil.colorizePAPI(staff,
-                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.frozen_message"))
+                player.sendMessage(ColorUtil.colorizePAPI(player,
+                        plugin.getConfigFile().getString("freeze_methods.freeze_chat.staff_message"))
                         .replace("{player}", player.getName())
                         .replace("{message}", event.getMessage()));
 
@@ -152,8 +143,8 @@ public class FreezeListener implements Listener {
     public void chatDisable(AsyncPlayerChatEvent event) {
         if (plugin.getConfigFile().getBoolean("freeze_methods.disable_global_chat")) {
             for (Player players : Bukkit.getOnlinePlayers()) {
-                if (plugin.getFreezeChat().containsKey(players.getUniqueId())
-                        || plugin.getFreezeChat().containsValue(players.getUniqueId())) {
+                if (plugin.getFrozenPlayers().containsKey(players.getUniqueId())
+                        || plugin.getFrozenPlayers().containsValue(players.getUniqueId())) {
                     event.getRecipients().remove(players);
                 }
             }

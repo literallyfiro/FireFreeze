@@ -12,7 +12,7 @@ public class MainCommand implements CommandExecutor {
 
     private String[] help = new String[]{
             "",
-            ColorUtil.colorize("&4Fire&cFreeze &7(v2.2)"),
+            ColorUtil.colorize("&4Fire&cFreeze &7(v2.3)"),
             "",
             ColorUtil.colorize("&c/firefreeze arguments:"),
             ColorUtil.colorize(" &c|- &freload &4- &cReloads the plugin"),
@@ -282,7 +282,7 @@ public class MainCommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage("§4Fire§cFreeze §7(v2.2) | §cType /firefreeze help for a list of commands");
+        sender.sendMessage("§4Fire§cFreeze §7(v2.3) | §cType /firefreeze help for a list of commands");
         return true;
 
     }

@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class FireFreezeUpdater {
     private Firefreeze plugin;
-    private int rId = 0;
+    private int rId;
     private String pluginVersion;
     private boolean updateFound;
 
@@ -24,22 +24,21 @@ public class FireFreezeUpdater {
     public void update() {
         plugin.getLogger().info("Checking for updates...");
 
-        try {
-            HttpURLConnection connection = (HttpsURLConnection) new URL(
-                    "https://api.spigotmc.org/legacy/update.php?resource=" + rId
-            ).openConnection();
+        Tasks.runAsync(() -> {
+            try {
+                HttpURLConnection connection = (HttpsURLConnection) new URL(
+                        "https://api.spigotmc.org/legacy/update.php?resource=" + rId
+                ).openConnection();
 
-            connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "FireFreezeUpdater");
 
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                String newVer = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
+                updateFound = !newVer.equalsIgnoreCase(pluginVersion);
 
-            String newVer = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
-            updateFound = !newVer.equalsIgnoreCase(pluginVersion);
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        });
 
         if (updateFound) {
             plugin.getLogger().info("Found a new Update! Please download it at https://www.spigotmc.org/resources/77105/");

@@ -15,7 +15,7 @@ import me.onlyfire.firefreeze.tasks.AnydeskTask;
 import me.onlyfire.firefreeze.tasks.FreezeMainTask;
 import me.onlyfire.firefreeze.utils.ColorUtil;
 import me.onlyfire.firefreeze.utils.FireFreezeUpdater;
-import org.bstats.bukkit.Metrics;
+import me.onlyfire.firefreeze.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,11 +34,14 @@ public class Firefreeze extends JavaPlugin {
     private FireFreezeConfiguration scoreboardFile;
     private FireFreezeUpdater updater;
     private SQLConnection connection;
-    private List<UUID> frozenPlayers = new ArrayList<>();
+
+    // FROZEN PLAYER - STAFF
+    private Map<UUID, UUID> frozenPlayers = new HashMap<>();
     private Map<UUID, FreezeBoard.ScoreBoardUpdater> scoreboardPlayers = new HashMap<>();
     private Map<UUID, AnydeskTask> anydeskTask = new HashMap<>();
-    private Map<UUID, UUID> freezeChat = new HashMap<>();
+//    private Map<UUID, UUID> freezeChat = new HashMap<>();
     private Map<UUID, FreezeTag> prefixSuffix = new HashMap<>();
+
     private FreezeMainTask mainTask;
     private String prefix;
 
